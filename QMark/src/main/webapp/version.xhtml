@@ -1,0 +1,134 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsf/composite"
+	xmlns:d="http://java.sun.com/jsp/jstl/core"
+	xmlns:t="http://myfaces.apache.org/tomahawk">
+
+<ui:composition template="template.xhtml">
+
+	<ui:define name="head">
+	</ui:define>
+
+	<ui:define name="content">
+		<div id="currentgenre">
+			<h:form id="currentgenre_form">
+				<h:commandLink value="My Account" action="account" />
+			-
+			<h:commandLink value="Projects" action="projects" />
+			-
+			<h:commandLink value="#{account.selectedVersion.app.name}"
+					action="#{account.openApp(account.selectedVersion.app, account.selecteMember)}"
+					disabled="#{!account.canViewApp(account.selectedVersion.app, account.selecteMember)}" />
+			-
+			<h:outputText value="#{account.selectedVersion.name}"
+					rendered="#{!account.newVersion}" />
+				<h:outputText value="#{account.selectedVersion.vendorVersionID}"
+					rendered="#{!account.newVersion and ((account.selectedVersion.name eq null) or account.selectedVersion.name.length() eq 0)}" />
+				<h:outputText value="New Project" rendered="#{account.newVersion}" />
+			</h:form>
+		</div>
+
+		<ui:include src="nav_top.xhtml" />
+
+		<div id="left">
+			<h:inputHidden id="navigation_account_disply"
+				rendered="#{account.loggedIn}">
+				<ui:include src="nav_account.xhtml" />
+			</h:inputHidden>
+		</div>
+
+		<div id="apps">
+			<h1>Version Details</h1>
+
+			<h:messages />
+
+			<h:form id="version_form">
+				<table>
+					<tr>
+						<td width="150px">Version of project:</td>
+						<td colspan="2"><h:commandLink
+								value="#{account.selectedVersion.app.name}"
+								action="#{account.openApp(account.selectedVersion.app)}" /></td>
+					</tr>
+					<tr>
+						<td>Name:<br /> <small>(e.g., honeycomb)</small></td>
+						<td><h:inputText size="85"
+								value="#{account.selectedVersion.name}" /></td>
+					</tr>
+					<tr>
+						<td>Version ID:*<br /> <small>(e.g., 4.0)</small></td>
+						<td colspan="2"><h:inputText size="85"
+								value="#{account.selectedVersion.vendorVersionID}" /></td>
+					</tr>
+					<tr>
+						<td>APK File:</td>
+						<td><h:outputText
+								value="#{versionManager.getApkOfVersion(account.selectedVersion).name}"
+								rendered="#{!account.newVersion and !(versionManager.getApkOfVersion(account.selectedVersion) eq null)}" />
+							<h:outputText value="No APK file available."
+								rendered="#{account.newVersion or versionManager.getApkOfVersion(account.selectedVersion) eq null}" /></td>
+					</tr>
+					<tr>
+						<td>Release:*</td>
+						<td><h:selectOneMenu
+								value="#{account.selectedVersion.visibility}"
+								converter="#{typeConverter}">
+								<f:selectItems value="#{account.versionTypes}" var="visibility"
+									itemLabel="#{visibility.description}" />
+							</h:selectOneMenu></td>
+					</tr>
+					<tr>
+						<td></td>
+						<td><h:commandButton value="Update Version"
+								action="#{account.updateVersion(account.selectedVersion)}"
+								rendered="#{!account.newVersion}" /> <h:commandButton
+								value="Create Version" action="#{account.createVersion}"
+								rendered="#{account.newVersion}" /></td>
+					</tr>
+				</table>
+			</h:form>
+
+			<h:form enctype="multipart/form-data"
+				rendered="#{!account.newVersion and account.selectedVersion.apk eq null}" id="apk_form">
+				<h2>Upload APK File</h2>
+				<p>Select and upload an Android package (APK) file for this
+					version:</p>
+				<h:inputHidden id="fileTarget" value="#{fileUpload.fileTarget}" />
+				<t:inputFileUpload value="#{fileUpload.uploadedFile}" />
+				<h:commandButton value="Add APK" action="#{fileUpload.uploadFile}"
+					onclick="document.getElementById('apk_form:fileTarget').value = 'version'" />
+			</h:form>
+
+			<h2>Test Suites</h2>
+			<p>The following test suites exist for this version:</p>
+			<h:form id="tests_form">
+				<h:dataTable value="#{account.selectedVersion.testSuites.toArray()}"
+					var="test" columnClasses="appdescription"
+					rendered="#{not empty account.selectedVersion.testSuites}">
+					<h:column>
+						<h:commandLink value="#{test.name}"
+							action="#{account.openTestSuite(test)}"
+							rendered="#{account.canViewTestSuite(test)}" />
+						<h:outputText value="##{test.name}"
+							rendered="#{!account.canViewTestSuite(test)}" />
+					</h:column>
+					<h:column>
+						<h:outputText
+							value="(#{testSuiteManager.getNumberOfTestRuns(test)} related test runs)" />
+					</h:column>
+				</h:dataTable>
+				<h:outputText value="No test are associated to this version."
+					rendered="#{empty account.selectedVersion.testSuites}" />
+				<br />
+				<h:commandLink value="Create a new test suite"
+					action="#{account.openNewTestSuite}"
+					rendered="#{account.canCreateNewTestSuite()}" />
+			</h:form>
+		</div>
+
+	</ui:define>
+</ui:composition>
+</html>

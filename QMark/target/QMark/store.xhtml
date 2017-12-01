@@ -1,0 +1,244 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+<ui:composition template="template.xhtml">
+	<ui:define name="content">
+		<c:set var="apps" value="sessionState.appsOfCurrentGenre" />
+
+		<h:messages />
+
+		<div id="currentgenre">
+			<h:outputText value="#{sessionState.currentGenre.name}"
+				rendered="#{not (sessionState.currentGenre eq null)}" />
+			<h:outputText value="No genre selected"
+				rendered="#{sessionState.currentGenre eq null}" />
+		</div>
+
+		<ui:include src="nav_top.xhtml" />
+
+		<div id="left">
+			<ui:include src="nav_genre.xhtml" />
+
+			<ui:include src="nav_usecases.xhtml" />
+		</div>
+
+		<div id="apps">
+			<h1>
+				<h:outputText value="#{sessionState.currentGenre.name}"
+					rendered="#{not (sessionState.currentGenre eq null)}" />
+				<h:outputText value="Welcome to QMark"
+					rendered="#{(sessionState.currentGenre eq null)}" />
+			</h1>
+
+			<h:inputHidden rendered="#{(sessionState.currentGenre eq null)}">
+			<p>Welcome to QMark, the energy-aware app store for mobile
+					applications. QMark is intended to help mobile application users in
+					finding apps supporting their personal needs and requirements as
+					well as being energy-efficient.</p>
+				<p>
+					Therefore, apps are ranked with genre-specific energy labels. <a
+						href="about.xhtml">Click here to learn more about QMark and
+						the intention behind QMark.</a>
+				</p>
+				<p>Select a genre from the list on the left to view
+					applications.</p>
+			</h:inputHidden>
+
+			<p>#{sessionState.currentGenre.description}</p>
+
+			<h:form id="usecases_form"
+				rendered="#{not (sessionState.currentGenre eq null)}">
+				<h2>Evaluation of #{sessionState.currentGenre.name}</h2>
+		    #{sessionState.currentGenre.name} have been evaluated by energy profiling them for a defined set of use
+		    cases. <h:commandLink
+					value="Click here to learn more about the use cases defined for the evaluation of 
+		    #{sessionState.currentGenre.name}."
+					action="usecases" />
+			</h:form>
+
+			<h2>
+				<h:outputText value="Evaluation Results"
+					rendered="#{not (sessionState.currentGenre eq null)}" />
+			</h2>
+			<h:form id="order_form"
+				rendered="#{not (empty apps) and (not (sessionState.currentGenre eq null))}">
+
+				<h:inputHidden value="#{sessionState.currentAppOrder}"
+					id="app_order" />
+				<h:commandLink value="Best label"
+					action="#{sessionState.updateGenre}"
+					onclick="document.getElementById('order_form:app_order').value = 'ENERGY_ASC'"
+					rendered="#{not (sessionState.currentAppOrder eq 'ENERGY_ASC')}" />
+				<h:outputText class="current" value="Best label"
+					rendered="#{sessionState.currentAppOrder eq 'ENERGY_ASC'}" />
+		  -
+  	      <h:commandLink value="worst label"
+					action="#{sessionState.updateGenre}"
+					onclick="document.getElementById('order_form:app_order').value = 'ENERGY_DESC'"
+					rendered="#{not (sessionState.currentAppOrder eq 'ENERGY_DESC')}" />
+				<h:outputText class="current" value="worst label"
+					rendered="#{sessionState.currentAppOrder eq 'ENERGY_DESC'}" />
+		  -
+  	      <h:commandLink value="best user ratings"
+					action="#{sessionState.updateGenre}"
+					onclick="document.getElementById('order_form:app_order').value = 'RATING_DESC'"
+					rendered="#{not (sessionState.currentAppOrder eq 'RATING_DESC')}" />
+				<h:outputText class="current" value="best user ratings"
+					rendered="#{sessionState.currentAppOrder eq 'RATING_DESC'}" />
+		  -
+  	      <h:commandLink value="worst user ratings"
+					action="#{sessionState.updateGenre}"
+					onclick="document.getElementById('order_form:app_order').value = 'RATING_ASC'"
+					rendered="#{not (sessionState.currentAppOrder eq 'RATING_ASC')}" />
+				<h:outputText class="current" value="worst user ratings"
+					rendered="#{sessionState.currentAppOrder eq 'RATING_ASC'}" />
+			</h:form>
+
+			<h:form id="apps_form">
+				<h:dataTable binding="#{table}"
+					value="#{sessionState.appsOfCurrentGenre}" var="app"
+					columnClasses="apprank,applogo,apptitle,appdescription"
+					rendered="#{not (empty apps)}">
+					<h:column>
+	            #{table.rowIndex + 1 + sessionState.currentFirstRank}.
+	         </h:column>
+					<h:column>
+						<img src="#{app.logo}" width="78" height="78"
+							alt="#{app.name} Logo" />
+					</h:column>
+					<h:column>
+						<div class="title">
+							<h:commandLink value="#{app.name}"
+								action="#{sessionState.openApp(app)}" />
+						</div>
+						<h:outputText value="#{app.vendor.name}" />
+						<br />
+						<c:set var="powerRate"
+							value="#{sessionState.getEnergyLabelOfApp(app)}" />
+						<img src="figures/#{powerRate}.gif" height="20"
+							title="Energy Label #{powerRate.toUpperCase()}." />
+						<br />
+						<img src="figures/#{app.ratingImage}_stars.gif" height="15"
+							title="Average User Rating: #{app.rating} Stars" />
+					</h:column>
+					<h:column>
+						<h:outputText value="#{app.description}" />
+					</h:column>
+				</h:dataTable>
+				<h:outputText
+					value="Currently no apps are enlisted in this genre. Yo may check again later or you can contribute
+	   	  by submitting apps belonging to this genre."
+					rendered="#{empty apps and not (sessionState.currentGenre eq null)}" />
+			</h:form>
+
+			<div id="navigation">
+				<h:form id="pagenav_form"
+					rendered="#{not (empty apps) and (not (sessionState.currentGenre eq null))}">
+					<h:inputHidden value="#{sessionState.currentPage}"
+						id="selected_page" />
+
+					<!-- previous page -->
+					<h:commandLink value="&nbsp; &lt; &nbsp;"
+						action="#{sessionState.updateGenre}"
+						onclick="document.getElementById('pagenav_form:selected_page').value = '#{sessionState.currentPage - 1}'"
+						rendered="#{sessionState.currentPage gt 0}" />
+					<h:outputText value="&nbsp; &lt; &nbsp;"
+						rendered="#{sessionState.currentPage lt 1}" />
+
+					<!-- current page minus 4 -->
+					<h:outputText value=" - "
+						rendered="#{sessionState.currentPage eq 4 and sessionState.totalPages eq 5}" />
+					<h:commandLink
+						value="&nbsp; #{sessionState.currentPage - 3} &nbsp;"
+						action="#{sessionState.updateGenre}"
+						onclick="document.getElementById('pagenav_form:selected_page').value = '#{sessionState.currentPage - 4}'"
+						rendered="#{sessionState.currentPage eq 4 and sessionState.totalPages eq 5}" />
+
+					<!-- current page minus 3 -->
+					<h:outputText value=" - "
+						rendered="#{(sessionState.currentPage eq 3 or sessionState.currentPage eq 4) and 
+			    	(sessionState.totalPages eq 4 or sessionState.totalPages eq 5)}" />
+					<h:commandLink
+						value="&nbsp; #{sessionState.currentPage - 2} &nbsp;"
+						action="#{sessionState.updateGenre}"
+						onclick="document.getElementById('pagenav_form:selected_page').value = '#{sessionState.currentPage - 3}'"
+						rendered="#{(sessionState.currentPage eq 3 or sessionState.currentPage eq 4) and 
+			    	(sessionState.totalPages eq 4 or sessionState.totalPages eq 5)}" />
+
+					<!-- current page minus 2 -->
+					<h:outputText value=" - "
+						rendered="#{sessionState.currentPage gt 1}" />
+					<h:commandLink
+						value="&nbsp; #{sessionState.currentPage - 1} &nbsp;"
+						action="#{sessionState.updateGenre}"
+						onclick="document.getElementById('pagenav_form:selected_page').value = '#{sessionState.currentPage - 2}'"
+						rendered="#{sessionState.currentPage gt 1}" />
+
+					<!-- current page minus 1 -->
+					<h:outputText value=" - "
+						rendered="#{sessionState.currentPage gt 0}" />
+					<h:commandLink value="&nbsp; #{sessionState.currentPage} &nbsp;"
+						action="#{sessionState.updateGenre}"
+						onclick="document.getElementById('pagenav_form:selected_page').value = '#{sessionState.currentPage - 1}'"
+						rendered="#{sessionState.currentPage gt 0}" />
+
+					<!-- current page -->
+			  -
+			  <h:outputText value="&nbsp; #{sessionState.currentPage + 1} &nbsp;"
+						class="current" />
+			  -
+	
+			  <!-- current page plus 1 -->
+					<h:commandLink
+						value="&nbsp; #{sessionState.currentPage + 2} &nbsp;"
+						action="#{sessionState.updateGenre}"
+						onclick="document.getElementById('pagenav_form:selected_page').value = '#{sessionState.currentPage + 1}'"
+						rendered="#{sessionState.totalPages gt (sessionState.currentPage + 1)}" />
+					<h:outputText value=" - "
+						rendered="#{sessionState.totalPages gt (sessionState.currentPage + 1)}" />
+
+					<!-- current page plus 2 -->
+					<h:commandLink
+						value="&nbsp; #{sessionState.currentPage + 3} &nbsp;"
+						action="#{sessionState.updateGenre}"
+						onclick="document.getElementById('pagenav_form:selected_page').value = '#{sessionState.currentPage + 2}'"
+						rendered="#{sessionState.totalPages gt (sessionState.currentPage + 2)}" />
+					<h:outputText value=" - "
+						rendered="#{sessionState.totalPages gt (sessionState.currentPage + 2)}" />
+
+					<!-- current page plus 3 -->
+					<h:commandLink
+						value="&nbsp; #{sessionState.currentPage + 4} &nbsp;"
+						action="#{sessionState.updateGenre}"
+						onclick="document.getElementById('pagenav_form:selected_page').value = '#{sessionState.currentPage + 3}'"
+						rendered="#{(sessionState.currentPage lt 2) and ((sessionState.totalPages - sessionState.currentPage) gt 3)}" />
+					<h:outputText value=" - "
+						rendered="#{(sessionState.currentPage lt 2) and ((sessionState.totalPages - sessionState.currentPage) gt 3)}" />
+
+					<!-- current page plus 4 -->
+					<h:commandLink
+						value="&nbsp; #{sessionState.currentPage + 5} &nbsp;"
+						action="#{sessionState.updateGenre}"
+						onclick="document.getElementById('pagenav_form:selected_page').value = '#{sessionState.currentPage + 4}'"
+						rendered="#{sessionState.currentPage eq 0 and (sessionState.totalPages gt 4)}" />
+					<h:outputText value=" - "
+						rendered="#{sessionState.currentPage eq 0 and (sessionState.totalPages gt 4)}" />
+
+					<!-- next page -->
+					<h:commandLink value="&nbsp; &gt; &nbsp;"
+						action="#{sessionState.updateGenre}"
+						onclick="document.getElementById('pagenav_form:selected_page').value = '#{sessionState.currentPage + 1}'"
+						rendered="#{sessionState.totalPages gt (sessionState.currentPage + 1)}" />
+					<h:outputText value="&nbsp; &gt; &nbsp;"
+						rendered="#{sessionState.totalPages le (sessionState.currentPage + 1)}" />
+				</h:form>
+			</div>
+
+		</div>
+	</ui:define>
+</ui:composition>
+</html>

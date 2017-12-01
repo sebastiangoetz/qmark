@@ -1,0 +1,15 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: QmarkService
+Bundle-SymbolicName: QmarkService
+Bundle-Version: 1.0.0.qualifier
+Class-Path: .
+Main-Class: org.tud.qmark.jouleunit.service.Main
+Export-Package: org.emftext.access,
+ org.emftext.access.resource,
+ org.qualitune.jouleunit,
+ org.qualitune.jouleunit.android,
+ org.qualitune.jouleunit.android.logcat,
+ org.qualitune.jouleunit.coordinator,
+ org.qualitune.jouleunit.persist,
+ org.qualitune.jouleunit.wt210

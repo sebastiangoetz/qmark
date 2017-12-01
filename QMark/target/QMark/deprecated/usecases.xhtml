@@ -1,0 +1,33 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+   xmlns:ui="http://java.sun.com/jsf/facelets"
+   xmlns:h="http://java.sun.com/jsf/html"
+   xmlns:f="http://java.sun.com/jsf/core"
+   xmlns:c="http://java.sun.com/jsf/composite">
+
+<ui:composition template="template.xhtml">
+	<ui:define name="head">
+	</ui:define>
+
+   <ui:define name="content">
+      <h:messages />
+
+ 	  <div id="currentgenre">
+	      <h:outputText value="#{sessionState.currentGenre.name}::Use Cases" rendered="#{not (sessionState.currentGenre eq null)}" />
+	      <h:outputText value="No genre selected" rendered="#{sessionState.currentGenre eq null}" />
+      </div>
+
+      <div id="left">
+	      <ui:include src="nav_genre.xhtml" />
+	      
+	  	  <ui:include src="nav_usecases.xhtml" />
+  	  </div>
+
+	  <div id="apps">
+        <h1><h:outputText value="#{sessionState.currentGenre.name}" /></h1>
+
+	  </div>  
+	  
+   </ui:define>
+</ui:composition>
+</html>

@@ -1,0 +1,82 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core">
+
+<ui:composition template="template.xhtml">
+	<ui:define name="content">
+		<div id="currentgenre">
+			<h:form id="currentgenre_form">
+				<a href="store.xhtml">Home</a> -
+				<h:outputText value=" About QMark" />
+			</h:form>
+		</div>
+
+		<ui:include src="nav_top.xhtml" />
+
+		<div id="left">
+			<h:inputHidden id="navigation_account_disply"
+				rendered="#{account.loggedIn}">
+				<ui:include src="nav_account.xhtml" />
+			</h:inputHidden>
+
+			<h:inputHidden id="navigation_genre_display"
+				rendered="#{!account.loggedIn}">
+				<ui:include src="nav_genre.xhtml" />
+			</h:inputHidden>
+		</div>
+
+		<div id="apps">
+			<h1>About QMark</h1>
+
+			<h:messages />
+
+			<h2>Problem</h2>
+			<p>Although mobile devices such as smart phones and tablets offer
+				various services and applications for their users, their energy
+				consumption is a problem of top most importance. Many applications
+				are implemented so inefficiently that batteries run out of power
+				within hours, leading to limited uptimes and user satisfaction.</p>
+
+			<h2>Idea</h2>
+			<p>To support users by finding energy-efficient applications
+				saving the batteries of their devices, QMark provides energy
+				guidance in form of energy labels for mobile apps.</p>
+
+			<h2>Process</h2>
+			<p>Depending on their genre, apps are profiled w.r.t. their
+				energy consumption for a dedicated set of use cases and afterwards
+				compared to other apps belonging to the same genre and providing
+				similar services.</p>
+			<p>The best energy-behaving app of a genre is labeled with an A,
+				other apps are ranked relatively, depending on their energy
+				consumption.</p>
+			<p>As different users may want to use the same applications
+				differently, weights can be defined by the user to consider
+				different use cases of the benchmark more or less intensly in the
+				average energy consumption. Therefore, users can adapt the labels
+				applications are ranked with for their personal needs and interest.</p>
+
+			<h2>Research</h2>
+			<img src="figures/esflogo.jpg" align="right" width="229" height="221" />
+			<p>QMark has been developed at the Technische Universit&auml;t
+				Dresden and is mainly driven by Class Wilke (&copy; 2012-2013).</p>
+			<p>This research has been funded within the project
+				ZESSY/QualiTune #080951806 by the European Social Fund (ESF) and
+				Federal State of Saxony.</p>
+			<p>
+				More information on QualiTune can be found at <a
+					href="http://www.qualitune.org/" target="_blank">http://www.qualitune.org/</a>.
+			</p>
+
+			<h2>Contact</h2>
+			<p>
+				If your are interested in QMark or related resarch topics, please
+				let us know. Contact information can be retrieved from <a
+					href="http://www.qualitune.org/" target="_blank">http://www.qualitune.org/</a>.
+			</p>
+		</div>
+	</ui:define>
+</ui:composition>
+</html>

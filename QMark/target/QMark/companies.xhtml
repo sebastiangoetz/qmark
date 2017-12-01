@@ -1,0 +1,65 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+<ui:composition template="template.xhtml">
+	<ui:define name="content">
+		<div id="currentgenre">
+			<h:form id="currentgenre_form">
+				<h:commandLink value="My Account" action="account" />
+			-
+			<h:outputText value="Companies" />
+			</h:form>
+		</div>
+
+		<ui:include src="nav_top.xhtml" />
+
+		<div id="left">
+			<h:inputHidden id="navigation_account_disply"
+				rendered="#{account.loggedIn}">
+				<ui:include src="nav_account.xhtml" />
+			</h:inputHidden>
+		</div>
+
+		<div id="apps">
+			<h1>My Companies</h1>
+			<h:messages />
+
+			<h:form id="companies_form">
+				<c:set var="companies"
+					value="userManager.getCompanyMembers(account.currentUser)" />
+				<h:dataTable binding="#{table}"
+					value="#{userManager.getCompanyMembers(account.currentUser)}"
+					var="member" columnClasses="appdescription"
+					rendered="#{not empty companies}">
+					<h:column>
+						<h:commandLink value="#{member.vendor.name}"
+							action="#{account.openVendor(member.vendor, member)}"
+							rendered="#{account.canViewVendor(member.vendor)}" />
+						<h:outputText value="#{member.vendor.name}"
+							rendered="#{!account.canViewVendor(member.vendor)}" />
+					</h:column>
+					<h:column>
+						<h:outputText value="#{member.type.description}" />
+					</h:column>
+					<h:column>
+						<h:commandLink value="Accept"
+							action="#{account.acceptCompanyMemberInvitation(member)}"
+							rendered="#{account.canAcceptCompanyMemberInvitation(member)}" />
+					</h:column>
+				</h:dataTable>
+				<h:outputText value="No companies are associated to your account."
+					rendered="#{empty companies}" />
+				<br />
+				<h:commandLink value="Add a new company"
+					action="#{account.openNewVendor}"
+					rendered="#{account.canCreateNewVendor()}" />
+			</h:form>
+
+		</div>
+	</ui:define>
+</ui:composition>
+</html>

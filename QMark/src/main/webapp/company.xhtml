@@ -1,0 +1,116 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsf/composite"
+	xmlns:d="http://java.sun.com/jsp/jstl/core">
+
+<ui:composition template="template.xhtml">
+
+	<ui:define name="head">
+	</ui:define>
+
+	<ui:define name="content">
+		<div id="currentgenre">
+			<h:form id="currentgenre_form">
+				<h:commandLink value="My Account" action="account" />
+			-
+				<h:commandLink value="Companies" action="companies" />
+			-
+			<h:outputText value="#{account.selectedVendor.name}"
+				rendered="#{!account.newVendor}" />
+			<h:outputText value="New Company" rendered="#{account.newVendor}" />
+			</h:form>
+		</div>
+
+		<ui:include src="nav_top.xhtml" />
+
+		<div id="left">
+			<h:inputHidden id="navigation_account_disply"
+				rendered="#{account.loggedIn}">
+				<ui:include src="nav_account.xhtml" />
+			</h:inputHidden>
+		</div>
+
+		<div id="apps">
+			<h1>Company Details</h1>
+
+			<h:messages />
+
+			<h:form id="vendor_form">
+				<table>
+					<tr>
+						<td>Name:*</td>
+						<td><h:inputText size="85"
+								value="#{account.selectedVendor.name}" /></td>
+					</tr>
+					<tr>
+						<td>Description:</td>
+						<td><h:inputText size="85"
+								value="#{account.selectedVendor.description}" /></td>
+					</tr>
+					<tr>
+						<td>Payment Plan:*</td>
+						<td><h:selectOneMenu
+								value="#{account.selectedVendor.paymentPlan}"
+								converter="#{paymentPlanConverter}">
+								<f:selectItems value="#{account.paymentPlans}" var="pp"
+									itemLabel="#{pp.paymentPlanID} - #{pp.type.name}" />
+							</h:selectOneMenu></td>
+					</tr>
+					<tr>
+						<td></td>
+						<td colspan="2"><h:commandButton value="Update Company"
+								action="#{account.updateVendor}"
+								rendered="#{!account.newVendor and account.canEditVendor(account.selectedVendor)}" />
+							<h:commandButton value="Create Company"
+								action="#{account.createVendor}"
+								rendered="#{account.newVendor and account.canCreateNewVendor()}" /></td>
+					</tr>
+				</table>
+			</h:form>
+
+			<h:inputHidden rendered="#{!account.newVendor}">
+				<h:form id="members_form">
+					<h2>Members</h2>
+					<p>The following users belong to this company:</p>
+					<d:set var="users"
+						value="#{vendorManager.getCompanyMembers(account.selectedVendor)}" />
+					<h:dataTable binding="#{table}"
+						value="#{vendorManager.getCompanyMembers(account.selectedVendor)}"
+						var="member"
+						columnClasses="appdescription,appdescription,appdescription,appdescription"
+						rendered="#{not empty users}">
+						<h:column>
+							<d:set var="user"
+								value="#{userManager.getUserFromMetaData(member.userMetaData)}" />
+							<h:outputText value="#{user.login}" />
+						</h:column>
+						<h:column>
+							<h:outputText value="(#{user.emailaddress})" />
+						</h:column>
+						<h:column>
+							<h:outputText value="#{member.type.description}" />
+						</h:column>
+						<h:column>
+							<h:commandLink value="Accept"
+								action="#{account.acceptCompanyMemberInvitation(member)}"
+								rendered="#{account.canAcceptCompanyMemberInvitation(member)}" />
+						</h:column>
+					</h:dataTable>
+					<h:outputText value="No users are associated to this company."
+						rendered="#{empty users}" />
+					<br />
+					Add a new member: 
+					<h:inputText value="#{account.newMemberMail}" size="50"
+						id="email" />
+					<h:commandButton value="Invite"
+						action="#{account.createCompanyMember}" />
+				</h:form>
+			</h:inputHidden>
+		</div>
+
+	</ui:define>
+</ui:composition>
+</html>

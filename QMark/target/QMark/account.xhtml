@@ -1,0 +1,72 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core">
+
+<ui:composition template="template.xhtml">
+	<ui:define name="content">
+		<div id="currentgenre">
+			<h:form id="currentgenre_form">
+				<h:commandLink value="My Account" action="account"
+					disabled="#{account.loggedIn}" />
+				<h:outputText value=" - Login" rendered="#{!account.loggedIn}" />
+			</h:form>
+		</div>
+
+		<ui:include src="nav_top.xhtml" />
+
+		<div id="left">
+			<h:inputHidden id="navigation_account_disply"
+				rendered="#{account.loggedIn}">
+				<ui:include src="nav_account.xhtml" />
+			</h:inputHidden>
+
+			<h:inputHidden id="navigation_genre_display"
+				rendered="#{!account.loggedIn}">
+				<ui:include src="nav_genre.xhtml" />
+			</h:inputHidden>
+		</div>
+
+		<div id="apps">
+			<h1>
+				<h:outputText value="Login" rendered="#{!account.loggedIn}" />
+				<h:outputText value="My Account" rendered="#{account.loggedIn}" />
+			</h1>
+
+			<h:messages />
+
+			<h:form id="loginForm" rendered="#{!account.loggedIn}">
+				<h:panelGrid columns="2">
+					<h:outputLabel for="username">Username:</h:outputLabel>
+					<h:inputText id="username" value="#{credentials.username}" />
+					<h:outputLabel for="password">Password:</h:outputLabel>
+					<h:inputSecret id="password" value="#{credentials.password}" />
+					<h:outputText value="" />
+					<h:commandButton id="login" value="Login" action="#{account.logIn}" />
+					<h:outputText value="" />
+					<h:commandLink value="Not registered? Click here to register."
+						action="#{account.openNewUser}" />
+				</h:panelGrid>
+			</h:form>
+
+			<h:inputHidden rendered="#{account.loggedIn}">
+				<p>
+					<h:outputText value="Hello, #{account.currentUser.login}." />
+				</p>
+
+				<p>You can use the menu on the left to manage your account and
+					maintain your projects.</p>
+			</h:inputHidden>
+			
+			<h:inputHidden rendered="#{account.newUser}">
+				<p>
+					<h:outputText value="Hello, #{account.currentUser.login}." />
+				</p>
+
+				<p>You have successfully registered for QMark. The administrator will activate your account soon.</p>
+			</h:inputHidden>
+		</div>
+	</ui:define>
+</ui:composition>
+</html>

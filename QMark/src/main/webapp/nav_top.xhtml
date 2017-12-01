@@ -1,0 +1,27 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsf/composite">
+
+<body>
+	<div id="navigationTop">
+		<h:form id="navigation_top_form">
+			<a href="store.xhtml">Home</a> -
+	    	<a href="about.xhtml">About</a> - 
+	   
+		  <h:outputText value="Logged in as #{account.currentUser.login} - "
+				rendered="#{account.loggedIn}" />
+			<h:commandLink value="Login" action="login"
+				rendered="#{!account.loggedIn}" />
+			<h:outputText
+				value="&lt;a href='account.xhtml'&gt;My Account&lt;/a&gt;"
+				rendered="#{account.loggedIn}" escape="false" />
+			<h:outputText value=" - " rendered="#{account.loggedIn}" />
+			<h:commandLink value="Logout" action="#{account.logOut}"
+				rendered="#{account.loggedIn}" />
+		</h:form>
+	</div>
+</body>
+</html>

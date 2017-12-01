@@ -1,0 +1,145 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsf/composite"
+	xmlns:d="http://java.sun.com/jsp/jstl/core"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:jsflot="http://www.jsflot.org/taglib/jsflot">
+
+<ui:composition template="template.xhtml">
+
+	<ui:define name="head">
+		<script
+			src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+		<script src="http://code.highcharts.com/highcharts.js"></script>
+
+		<h:outputText
+			value="&lt;script language='JavaScript'&gt;
+			$(function () {
+	        $('#chart').highcharts({
+	            chart: {
+	                type: 'spline'
+	            },
+	            xAxis: {
+	                type: 'datetime',
+	                dateTimeLabelFormats: { 
+	                    month: '%e. %b',
+	                    year: '%b'
+	                }
+	            },
+	            
+	            series: [{
+	                name: 'Power Rate [mW]',
+	                color: '#2e7dd8',
+	                data: [
+	                    #{testCaseManager.getPowerRatesOfTestCaseAsJsData(account.selectedTestCase)}
+	                ]
+	            }, {
+	                name: 'WiFi Traffic [KB]',
+	                color: '#ffc800',
+	                data: [
+	                    #{testCaseManager.getWifiDataOfTestCaseAsJsData(account.selectedTestCase)}
+	                ]
+	            }, {
+	                name: 'Display Brightness [0 .. 255]',
+	                color : '#289628',
+	                data: [
+	                    #{testCaseManager.getDisplayDataOfTestCaseAsJsData(account.selectedTestCase)}
+	                ]
+	            },
+	            #{testCaseManager.getCpuDataOfTestCaseAsJsData(account.selectedTestCase)}
+	            ]
+	        });
+	    });
+	    &lt;/script&gt;" />
+	</ui:define>
+
+	<ui:define name="content">
+		<div id="currentgenre">
+			<h:form id="currentgenre_form">
+				<h:commandLink value="My Account" action="account" />
+				- <h:commandLink value="Projects" action="projects" />
+				- <h:commandLink
+					value="#{account.selectedTestRun.testSuite.version.app.name}"
+					action="#{account.openApp(account.selectedTestRun.testSuite.version.app, account.selecteMember)}"
+					disabled="#{!account.canViewApp(account.selectedTestRun.testSuite.version.app, account.selecteMember)}" />
+				- <d:set var="versionname"
+					value="#{account.selectedTestRun.testSuite.version.name}" />
+				<h:commandLink
+					value="#{account.selectedTestRun.testSuite.version.vendorVersionID}"
+					action="#{account.openVersion(account.selectedTestRun.testSuite.version)}"
+					disabled="#{!account.canViewVersion(account.selectedTestRun.testSuite.version)}"
+					rendered="#{(versionname eq null) or (versionname.length() eq 0)}" />
+				<h:commandLink value="#{versionname}"
+					action="#{account.openVersion(account.selectedTestRun.testSuite.version)}"
+					disabled="#{!account.canViewVersion(account.selectedTestRun.testSuite.version)}"
+					rendered="#{(!(versionname eq null)) and  (!(versionname.length() eq 0))}" />
+				- <h:commandLink value="#{account.selectedTestRun.testSuite.name}"
+					action="#{account.openTestSuite(account.selectedTestRun.testSuite)}"
+					disabled="#{!account.canViewTestSuite(account.selectedTestRun.testSuite)}" />
+				- <h:commandLink
+					value="Test Run ##{account.selectedTestRun.testRunID}"
+					action="#{account.openTestRun(account.selectedTestRun)}"
+					disabled="#{!account.canViewTestRun(account.selectedTestRun)}" />
+			</h:form>
+		</div>
+
+		<ui:include src="nav_top.xhtml" />
+
+		<div id="left">
+			<h:inputHidden id="navigation_account_disply"
+				rendered="#{account.loggedIn}">
+				<ui:include src="nav_account.xhtml" />
+			</h:inputHidden>
+		</div>
+
+		<div id="apps">
+			<h1>
+				Test Case
+				<h:outputText value="#{account.selectedTestCase.name}" />
+				- Details
+			</h1>
+
+			<h:messages />
+
+			<h3>Profiled data over time</h3>
+			<div id="chart"></div>
+
+			<h3>Average Values:</h3>
+			<table>
+				<tr>
+					<td class="left">Result</td>
+					<td class="right"><h:outputText value="ok"
+							rendered="#{account.selectedTestCase.result eq 1}" /> <h:outputText
+							value="failure"
+							rendered="#{account.selectedTestCase.result eq -1}" /></td>
+				</tr>
+				<tr>
+					<td class="left">Duration [ms]</td>
+					<td class="right"><d:set
+							value="#{account.selectedTestCase.stop - account.selectedTestCase.start}"
+							var="duration" /> <h:outputText value="#{duration}" /></td>
+				</tr>
+				<tr>
+					<td class="left">Power Rate [mW]</td>
+					<td class="right"><h:outputText
+							value="#{account.selectedTestCase.avgPowerRate}"
+							rendered="#{account.selectedTestCase.avgPowerRate != null}" /> <h:outputText
+							value="#{testSuiteManager.getPowerRate(account.selectedTestCase)}"
+							rendered="#{account.selectedTestCase.avgPowerRate == null}" /></td>
+				</tr>
+				<tr>
+					<td class="left">Consumption [mJ]</td>
+					<td class="right"><h:outputText
+							value="#{account.selectedTestCase.avgPowerRate * duration / 1000}">
+							<f:convertNumber maxFractionDigits="2" minFractionDigits="2" />
+						</h:outputText></td>
+				</tr>
+			</table>
+		</div>
+	</ui:define>
+</ui:composition>
+</html>

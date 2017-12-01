@@ -1,0 +1,224 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsf/composite"
+	xmlns:d="http://java.sun.com/jsp/jstl/core">
+
+<ui:composition template="template.xhtml">
+
+	<ui:define name="head">
+		<script type="text/javascript">
+			function showDetails() {
+				if (document.getElementById('details').style.display == 'none') {
+					document.getElementById('details').style.display = 'inline';
+				}
+				else {
+					document.getElementById('details').style.display = 'none';
+				}
+			}
+		</script>
+	</ui:define>
+
+	<ui:define name="content">
+		<h:messages />
+
+		<div id="currentgenre">
+			<h:outputText
+				value="#{sessionState.currentGenre.name}::#{sessionState.currentApp.name}"
+				rendered="#{not (sessionState.currentApp eq null)}" />
+			<h:outputText value="No app selected"
+				rendered="#{sessionState.currentApp eq null}" />
+		</div>
+
+		<ui:include src="nav_top.xhtml" />
+
+		<div id="left">
+			<ui:include src="nav_genre.xhtml" />
+
+			<ui:include src="nav_usecases.xhtml" />
+		</div>
+
+
+		<div id="apps">
+
+			<d:set var="powerRate"
+				value="#{sessionState.getPowerRateOfApp(sessionState.currentApp)}" />
+
+			<h1>
+				<h:outputText value="#{sessionState.currentApp.name}"
+					rendered="#{not (sessionState.currentApp eq null)}" />
+				<h:outputText value="No App Selected"
+					rendered="#{(sessionState.currentApp eq null)}" />
+			</h1>
+
+			<h:outputText
+				value="Select a genre from the list on the left to view applications."
+				rendered="#{(sessionState.currentApp eq null)}" />
+
+			<h:inputHidden rendered="#{not (sessionState.currentApp eq null)}">
+				<table>
+					<tr>
+						<td class="applogo"><img
+							src="#{sessionState.currentApp.logo}" width="78" height="78"
+							alt="#{sessionState.currentApp.name} Logo" /></td>
+						<td class="appdetails"><img
+							src="figures/#{sessionState.getEnergyLabelOfApp(sessionState.currentApp)}.gif"
+							height="20"
+							title="Energy Label #{sessionState.getEnergyLabelOfApp(sessionState.currentApp).toUpperCase()}." />
+							<br /> <br /> <img
+							src="figures/#{sessionState.currentApp.ratingImage}_stars.gif"
+							height="15"
+							title="Average User Rating: #{sessionState.currentApp.rating} Stars" />
+						</td>
+						<td class="appdescription"><h:outputText
+								value="Evaluated version: #{sessionState.currentAppVersion.vendorVersionID}" />
+							<br /> <br /> Developed by: <h:outputText
+								value="#{sessionState.currentApp.vendor.name}" /><br /> <a
+							href="https://play.google.com/store/apps/details?id=#{sessionState.currentApp.packageID}"
+							target="_blank">Click here to install (via Google Play)</a><br />
+						</td>
+					</tr>
+				</table>
+			</h:inputHidden>
+
+			<h2>
+				<h:outputText value="Description"
+					rendered="#{not (sessionState.currentApp eq null)}" />
+			</h2>
+			<h:outputText value="#{sessionState.currentApp.description}"
+				rendered="#{not (sessionState.currentApp eq null)}" />
+
+			<h2>
+				<h:outputText value="Energy Behavior"
+					rendered="#{not (sessionState.currentApp eq null)}" />
+			</h2>
+
+			<h:inputHidden rendered="#{not (sessionState.currentApp eq null)}">
+				<table>
+					<tr>
+						<td class="apprating">General Rating:</td>
+						<td class="appdetails"><img
+							src="figures/#{sessionState.getEnergyLabelOfApp(sessionState.currentApp)}.gif"
+							height="20"
+							title="Energy Label #{sessionState.getEnergyLabelOfApp(sessionState.currentApp).toUpperCase()}." />
+						</td>
+						<td class="appdescription"><h:outputText
+								value="(Rank
+							#{sessionState.getEnergyRankOfApp(sessionState.currentApp)} in
+							#{sessionState.currentGenre.name})"
+								rendered="#{powerRate gt 0}" /></td>
+					</tr>
+					<tr>
+						<td class="apprating">Avg. Consumption:</td>
+						<td colspan="2" class="appdetails"><d:set
+								var="batteryCapacity"
+								value="#{sessionState.currentAppVersion.energyModel.device.batteryCapacity}" />
+							<h:inputHidden rendered="#{powerRate gt 0}">
+								<b> <h:outputText value="#{powerRate}">
+										<f:convertNumber maxFractionDigits="2" />
+									</h:outputText>mW
+								</b>
+								<p>
+									(Decreases a
+									<h:outputText
+										value="#{sessionState.currentAppVersion.energyModel.device.name}" />
+									having battery with a capacity of
+									<h:outputText value="#{batteryCapacity / 1000}" />
+									Wh by <b><h:outputText
+											value="#{1 / (batteryCapacity / powerRate) * 100}"
+											rendered="#{powerRate gt 0}">
+											<f:convertNumber maxFractionDigits="2" />
+										</h:outputText>% in 1 hour</b>) <a href="javascript:showDetails();">What
+										does this mean?</a>
+								</p>
+								<p id="details" style="display: none;">The average energy
+									consumption measured for the application is the device's total
+									energy consumption while running the labeled application
+									explicitly (no other applications running in parallel).
+									Therefore, based on the device's battery capacity and the
+									measured average consumption it can be approximated how long
+									the battery will last when the application is used with its
+									different use cases as configured below. If other applications
+									are used in parallel, or the usage differs from the usage
+									defined below, the battery may last longer or shorter as
+									approximated.</p>
+							</h:inputHidden> <h:outputText
+								value="No energy consumption available yet. The app has been added to this genre but its energy behavior has not been measured yet. The app is either currently profiled or will be profiled within the next hours. Please check again for energy measurement results later."
+								rendered="#{powerRate lt 0}" /></td>
+					</tr>
+				</table>
+			</h:inputHidden>
+
+			<h:inputHidden
+				rendered="#{(not (sessionState.currentApp eq null)) and (powerRate gt 0)}">
+				<h3>
+					<h:outputText value="Details" />
+				</h3>
+		Profiling results for version 
+		<h:outputText
+					value="#{sessionState.currentAppVersion.vendorVersionID}" />
+		profiled on a
+		<h:outputText
+					value="#{sessionState.currentAppVersion.energyModel.device.name}" />
+				<h:outputText
+					value=" (with #{sessionState.currentAppVersion.energyModel.device.configuration})" />
+		on 
+		<h:outputText
+					value="#{sessionState.currentAppVersion.energyModel.profilingDate}">
+					<f:convertDateTime type="date" pattern="MMM dd, yyyy" locale="us" />
+				</h:outputText>: 
+		<br />
+				<br />
+
+				<h:dataTable
+					value="#{sessionState.currentGenre.useCaseModel.transitions}"
+					var="transition"
+					columnClasses="apprating,transitiondetails,transitiondetails,apprate,appsmallrank">
+					<h:column>
+						<div title="#{transition.description}">#{transition.name}:</div>
+					</h:column>
+					<h:column>
+						<img
+							src="figures/#{sessionState.getEnergyLabelOfApp(sessionState.currentApp, transition)}.gif"
+							height="20"
+							title="Energy Label #{sessionState.getEnergyLabelOfApp(sessionState.currentApp, transition).toUpperCase()}." />
+					</h:column>
+					<h:column>
+						<input type="range" min="0" max="4"
+							value="#{sessionState.useCaseIntensity[transition.name]}"
+							onclick="updateTransition('#{transition.transitionID}_intensity', this.value)"
+							title="#{transition.description}" />
+						<div name="#{transition.transitionID}_intensity">
+							<h:inputHidden
+								value="#{sessionState.useCaseIntensity[transition.name]}" />
+						</div>
+					</h:column>
+					<h:column>
+						<h:outputText
+							value="#{sessionState.currentApp.getLatestVersion().getPowerRate(transition)}">
+							<f:convertNumber maxFractionDigits="2" />
+						</h:outputText>mW
+	         </h:column>
+					<h:column>
+    			(Rank #{sessionState.getEnergyRankOfApp(sessionState.currentApp, transition)} in #{sessionState.currentGenre.name})
+	         </h:column>
+				</h:dataTable>
+			</h:inputHidden>
+
+			<br />
+
+			<h:form id="usecases_form"
+				rendered="#{not (sessionState.currentGenre eq null)}">
+		    #{sessionState.currentGenre.name} applications have been evaluated by energy profiling them for a defined set of use
+		    cases. <h:commandLink
+					value="Click here to learn more about the use cases defined for the evaluation of 
+		    #{sessionState.currentGenre.name} applications."
+					action="usecases" />
+			</h:form>
+		</div>
+
+	</ui:define>
+</ui:composition>
+</html>

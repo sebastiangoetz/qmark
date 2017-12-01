@@ -1,0 +1,28 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsf/composite">
+
+<body>
+	<div id="genre">
+		<h:form id="genre_form">
+			<h:inputHidden value="#{sessionState.currentGenre}"
+				converter="#{genreConverter}" id="selected_genre" />
+			<h:dataTable value="#{genreManager.genres}" var="genre">
+				<h:column>
+					<h:commandLink value="#{genre.name}"
+						action="#{sessionState.updateGenre}"
+						onclick="document.getElementById('genre_form:selected_genre').value = '#{genre.name}'"
+						rendered="#{not (sessionState.currentGenre eq genre)}" />
+					<h:outputText
+						value="&lt;a href='store.xhtml' class='current'&gt;#{sessionState.currentGenre.name}&lt;/a&gt;"
+						action="#{sessionState.updateGenre}" escape="false"
+						rendered="#{sessionState.currentGenre eq genre}" />
+				</h:column>
+			</h:dataTable>
+		</h:form>
+	</div>
+</body>
+</html>

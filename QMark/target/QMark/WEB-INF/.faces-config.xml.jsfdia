@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PROCESS model-entity="JSFProcess">
+ <PROCESS-ITEM NAME="rules:#app.xhtml" PATH="/app.xhtml"
+  SHAPE="32,17,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#usecases.xhtml" PATH="/usecases.xhtml"
+  SHAPE="480,17,0,0" model-entity="JSFProcessGroup">
+  <PROCESS-ITEM ID="rules:#usecases.xhtml:0" NAME="item"
+   PATH="/usecases.xhtml" model-entity="JSFProcessItem">
+   <PROCESS-ITEM-OUTPUT ID="genre::#store.xhtml" NAME="output"
+    PATH="/store.xhtml" TARGET="rules:#store.xhtml" TITLE="genre" model-entity="JSFProcessItemOutput"/>
+  </PROCESS-ITEM>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM NAME="rules:#store.xhtml" PATH="/store.xhtml"
+  SHAPE="256,33,0,0" model-entity="JSFProcessGroup">
+  <PROCESS-ITEM ID="rules:#store.xhtml:0" NAME="item"
+   PATH="/store.xhtml" model-entity="JSFProcessItem">
+   <PROCESS-ITEM-OUTPUT ID="app::#app.xhtml" NAME="output"
+    PATH="/app.xhtml" TARGET="rules:#app.xhtml" TITLE="app" model-entity="JSFProcessItemOutput"/>
+  </PROCESS-ITEM>
+  <PROCESS-ITEM ID="rules:#store.xhtml:1" NAME="item1"
+   PATH="/store.xhtml" model-entity="JSFProcessItem">
+   <PROCESS-ITEM-OUTPUT ID="usecases::#usecases.xhtml" NAME="output"
+    PATH="/usecases.xhtml" TARGET="rules:#usecases.xhtml"
+    TITLE="usecases" model-entity="JSFProcessItemOutput"/>
+  </PROCESS-ITEM>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM NAME="rules:#account.xhtml" PATH="/account.xhtml"
+  SHAPE="32,161,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#*" PATH="/*" SHAPE="32,273,0,0" model-entity="JSFProcessGroup">
+  <PROCESS-ITEM ID="rules:#*:0" NAME="item" PATH="/*" model-entity="JSFProcessItem">
+   <PROCESS-ITEM-OUTPUT ID="companies::#companies.xhtml" NAME="output1"
+    PATH="/companies.xhtml" TARGET="rules:#companies.xhtml"
+    TITLE="companies" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="company::#company.xhtml" NAME="output"
+    PATH="/company.xhtml" TARGET="rules:#company.xhtml" TITLE="company" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="genre::#store.xhtml" NAME="output2"
+    PATH="/store.xhtml" TARGET="rules:#store.xhtml" TITLE="genre" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="home::#store.xhtml" NAME="output3"
+    PATH="/store.xhtml" TARGET="rules:#store.xhtml" TITLE="home" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="login::#account.xhtml" NAME="output4"
+    PATH="/account.xhtml" TARGET="rules:#account.xhtml" TITLE="login" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="logout::#account.xhtml" NAME="output5"
+    PATH="/account.xhtml" TARGET="rules:#account.xhtml" TITLE="logout" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="project::#project.xhtml" NAME="output6"
+    PATH="/project.xhtml" TARGET="rules:#project.xhtml" TITLE="project" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="projects::#admin.xhtml" NAME="output7"
+    PATH="/admin.xhtml" TARGET="rules:#admin.xhtml" TITLE="projects" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="settings::#settings.xhtml" NAME="output8"
+    PATH="/settings.xhtml" TARGET="rules:#settings.xhtml"
+    TITLE="settings" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="testrun::#testrun.xhtml" NAME="output9"
+    PATH="/testrun.xhtml" TARGET="rules:#testrun.xhtml" TITLE="testrun" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="testruns::#testruns.xhtml" NAME="output10"
+    PATH="/testruns.xhtml" TARGET="rules:#testruns.xhtml"
+    TITLE="testruns" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="testsuite::#testsuite.xhtml" NAME="output11"
+    PATH="/testsuite.xhtml" TARGET="rules:#testsuite.xhtml"
+    TITLE="testsuite" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="version::#version.xhtml" NAME="output12"
+    PATH="/version.xhtml" TARGET="rules:#version.xhtml" TITLE="version" model-entity="JSFProcessItemOutput"/>
+  </PROCESS-ITEM>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM NAME="rules:#admin.xhtml" PATH="/admin.xhtml"
+  SHAPE="240,625,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#project.xhtml" PATH="/project.xhtml"
+  SHAPE="448,609,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#version.xhtml" PATH="/version.xhtml"
+  SHAPE="656,625,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#settings.xhtml" PATH="/settings.xhtml"
+  SHAPE="240,737,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#companies.xhtml" PATH="/companies.xhtml"
+  SHAPE="320,289,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#company.xhtml" PATH="/company.xhtml"
+  SHAPE="304,529,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#testsuite.xhtml" PATH="/testsuite.xhtml"
+  SHAPE="320,625,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#testrun.xhtml" PATH="/testrun.xhtml"
+  SHAPE="320,625,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#testruns.xhtml" PATH="/testruns.xhtml"
+  SHAPE="320,657,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#testcase.xhtml" PATH="/testcase.xhtml"
+  SHAPE="304,721,0,0" model-entity="JSFProcessGroup"/>
+</PROCESS>

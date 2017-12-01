@@ -1,0 +1,54 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+<ui:composition template="template.xhtml">
+	<ui:define name="content">
+		<c:set var="apps" value="sessionState.appsOfCurrentGenre" />
+
+		<h:messages />
+
+		<div id="currentgenre">
+			<a href="store.xhtml"> <h:outputText
+					value="#{sessionState.currentGenre.name}"
+					rendered="#{not (sessionState.currentGenre eq null)}" /> <h:outputText
+					value="No genre selected"
+					rendered="#{sessionState.currentGenre eq null}" /></a> - Benchmark
+			Details
+		</div>
+
+		<ui:include src="nav_top.xhtml" />
+
+		<div id="left">
+			<ui:include src="nav_genre.xhtml" />
+
+			<ui:include src="nav_usecases.xhtml" />
+		</div>
+
+		<div id="apps">
+			<h1>
+				<h:outputText value="#{sessionState.currentGenre.name}"
+					rendered="#{not (sessionState.currentGenre eq null)}" />
+				<h:outputText value="No Genre Selected"
+					rendered="#{(sessionState.currentGenre eq null)}" />
+			</h1>
+
+			<h:outputText
+				value="Select a genre from the list on the left to view applications."
+				rendered="#{(sessionState.currentGenre eq null)}" />
+
+			<h:inputHidden rendered="#{!(sessionState.currentGenre eq null)}">
+				<p>#{sessionState.currentGenre.description}</p>
+			</h:inputHidden>
+
+			<h:outputText value="#{sessionState.currentGenre.useCaseModel.description}"
+				rendered="#{!(sessionState.currentGenre.useCaseModel eq null)}" escape="false"/>
+			<h:outputText value="No benchmark information available for this genre."
+				rendered="#{(sessionState.currentGenre.useCaseModel eq null)}" />
+		</div>
+	</ui:define>
+</ui:composition>
+</html>

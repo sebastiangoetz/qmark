@@ -1,0 +1,282 @@
+/* General settings */
+body {
+	font-size: 80%;
+	font-family: Verdana, Arial, Sans-Serif;
+	color: #3d3d3d;
+	background-color: #ededed;
+}
+
+.todo {
+	color: #ff0000;
+	font-weight: 700;
+}
+
+a {
+	color: #3d3d3d;
+}
+
+#container {
+	position: absolute;
+	left: 50%;
+	width: 1000px;
+	margin-left: -500px;
+	min-height: 5.0em;
+}
+
+/* Current genre section. */
+#currentgenre {
+	min-height: 2em;
+	width: 50.7em;
+	padding-top: 0.6em;
+	padding-left: 0.8em;
+	padding-right: 0.6em;
+	margin-bottom: 0.3em;
+	border-top: 3px solid #7b9726;
+	background-color: #8eb53b;
+	font-size: 150%;
+	color: #ffffff;
+}
+
+#currentgenre a {
+	color: #ffffff;
+}
+
+/* Navigation Top section. */
+#navigationTop {
+	width: 76.65em;
+	padding-top: 0.2em;
+	padding-left: 0.8em;
+	padding-right: 0.6em;
+	padding-bottom: 0.3em;
+	margin-bottom: 0.6em;
+	border-top: 1px solid #3d3d3d;
+	font-size: 100%;
+	text-align: right;
+	background-color: #3d3d3d;
+	color: #ffffff;
+}
+
+#navigationTop a {
+	color: #ffffff;
+}
+
+/* Genre section. */
+#left {
+	width: 15em;
+	float: left;
+	min-height: 20em;
+}
+
+#genre {
+	border-top: 2px solid #3d3d3d;
+	background-color: #ffffff;
+}
+
+#genre table {
+	list-style-type: none;
+	margin-top: 1.6em;
+	margin-left: 1.6em;
+	margin-right: 1.6em;
+	padding-bottom: 2em;
+}
+
+#genre table tr td {
+	border-bottom: 1px solid #ececec;
+	padding-bottom: 0.8em;
+	padding-top: 0.8em;
+}
+
+#genre table tr td a.current {
+	display: block;
+	font-weight: 700;
+}
+
+#genre table tr td a {
+	color: #3d3d3d;
+	text-decoration: none;
+}
+
+#genre table tr td a:hover,#genre table tr td a:focus,#genre table tr td a:active
+	{
+	text-decoration: underline;
+}
+
+/* Apps Section. */
+#apps {
+	border-top: 2px solid #3d3d3d;
+	background-color: #ffffff;
+	margin-left: 16em;
+	max-width: 59em;
+	min-height: 30em;
+	padding-top: 1.6em;
+	padding-left: 1.6em;
+	padding-right: 1.6em;
+	padding-bottom: 1.6em;
+}
+
+#apps span.current {
+	font-weight: 700;
+}
+
+#apps table {
+	border-collapse: collapse;
+	border-top: 1px solid #ececec;
+}
+
+#apps table tr {
+	border-bottom: 1px solid #ececec;
+}
+
+#apps table tr td {
+	padding-bottom: 0.6em;
+	padding-top: 0.6em;
+}
+
+#apps table tr td.apprank {
+	font-size: 170%;
+	width: 2em;
+	text-align: right;
+	padding-right: 0.5em;
+	vertical-align: center;
+	font-weight: 700;
+}
+
+#apps table tr td.apptitle {
+	padding-left: 1.6em;
+	padding-right: 1.6em;
+	width: 15em;
+	vertical-align: center;
+}
+
+#apps table tr td.apptitle div.title {
+	display: block;
+	font-weight: 700;
+}
+
+#apps table tr td.appdescription {
+	width: 30em;
+}
+
+#apps table tr td.appdetails {
+	width: 22em;
+	padding-left: 1.0em;
+}
+
+#apps table tr td.apprating {
+	width: 12em;
+	text-align: left;
+}
+
+#apps table tr td.apprate {
+	width: 6em;
+	text-align: right;
+}
+
+#apps table tr td.appsmallrank {
+	width: 13em;
+	text-align: right;
+}
+
+#apps table tr td.left {
+	text-align: left;
+	width: 10em;
+}
+
+#apps table tr td.right {
+	text-align: right;
+	width: 12em;
+}
+
+#apps table tr td.center {
+	text-align: center;
+	width: 5em;
+}
+
+/* Use cases section. */
+#usecases {
+	margin-top: 0.5em;
+	border-top: 2px solid #3d3d3d;
+	background-color: #ffffff;
+}
+
+#usecases table {
+	list-style-type: none;
+	margin-top: 1.6em;
+	margin-left: 1.6em;
+	margin-right: 2.6em;
+	padding-bottom: 2em;
+}
+
+#usecases table tr td {
+	border-bottom: 1px solid #ececec;
+	padding-bottom: 0.8em;
+	padding-top: 0.8em;
+}
+
+/* Account navigation. */
+#account {
+	margin-top: 0.0em;
+	border-top: 2px solid #3d3d3d;
+	background-color: #ffffff;
+}
+
+#account table {
+	list-style-type: none;
+	margin-top: 1.6em;
+	margin-left: 1.6em;
+	margin-right: 2.6em;
+	padding-bottom: 2em;
+}
+
+#account table tr td {
+	border-bottom: 1px solid #ececec;
+	padding-bottom: 0.8em;
+	padding-top: 0.8em;
+}
+
+/* App Navigation */
+#navigation {
+	text-align: center;
+	padding-top: 0.5em;
+	padding-bottom: 0.5em;
+}
+
+#navigation span.current {
+	font-weight: 700;
+}
+
+#navigation a {
+	text-decoration: none;
+	padding-top: 0.5em;
+	padding-bottom: 0.5em;
+}
+
+#navigation a:hover,#navigation a:focus,#navigation a:active {
+	color: #ffffff;
+	background-color: #8eb53b;
+}
+
+/* Footer */
+#footer {
+	clear: both;
+	min-height: 2em;
+	width: 75em;
+	margin-top: 0.6em;
+	padding-top: 0.6em;
+	padding-left: 1.6em;
+	padding-right: 1.6em;
+	padding-bottom: 1.0em;
+	border-top: 3px solid #88b131;
+	background-color: #3d3d3d;
+	color: #ffffff;
+}
+
+/* Formatierung der einzelen Bereiche */
+#header {
+	min-height: 5.0em;
+	width: 100%;
+}
+
+.console {
+	white-space: pre;
+}

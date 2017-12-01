@@ -1,0 +1,87 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:d="http://java.sun.com/jsp/jstl/core">
+
+<ui:composition template="template.xhtml">
+	<ui:define name="content">
+		<div id="currentgenre">
+			<h:form id="currentgenre_form">
+				<h:commandLink value="My Account" action="account" />
+			-
+			<h:outputText value="Test Runs" />
+			</h:form>
+		</div>
+
+		<ui:include src="nav_top.xhtml" />
+
+		<div id="left">
+			<h:inputHidden id="navigation_account_disply"
+				rendered="#{account.loggedIn}">
+				<ui:include src="nav_account.xhtml" />
+			</h:inputHidden>
+		</div>
+
+		<div id="apps">
+			<h1>My Test Runs</h1>
+			<h:messages />
+
+			<h:form id="apps_form">
+				<d:set
+					value="#{testSuiteManager.getTestRunsOfUser(account.currentUser)}"
+					var="testRuns" />
+				<h:dataTable binding="#{table}"
+					value="#{testSuiteManager.getTestRunsOfUser(account.currentUser)}"
+					var="testrun"
+					columnClasses="appdescription,appdescription,appdescription,appdescription,appdescription"
+					rendered="#{not empty testRuns}">
+					<h:column>
+						<h:commandLink value="##{testrun.testRunID}"
+							action="#{account.openTestRun(testrun)}"
+							disabled="#!{account.canViewTestRun(testrun)}" />
+					</h:column>
+					<h:column>
+						<h:inputHidden rendered="#{testrun.type.description eq 'Running'}">
+							<img src="figures/progressbar.gif" />
+						</h:inputHidden>
+						<h:commandLink value="#{testrun.type.description}"
+							action="#{account.openTestRun(testrun)}"
+							disabled="#!{account.canViewTestRun(testrun)}"
+							rendered="#{!(testrun.type.description eq 'Running')}" />
+					</h:column>
+					<h:column>
+						<h:commandLink value="#{testrun.testSuite.name}"
+							action="#{account.openTestSuite(testrun.testSuite)}"
+							disabled="#!{account.canViewTestSuite(#{testrun.testSuite})}" />
+					</h:column>
+					<h:column>
+						<h:commandLink value="#{testrun.testSuite.version.name}"
+							action="#{account.openVersion(testrun.testSuite.version)}"
+							disabled="#!{account.canViewVersion(#{testrun.testSuite.version})}"
+							rendered="#{!testrun.testSuite.version.name eq null}" />
+						<h:commandLink
+							value="#{testrun.testSuite.version.vendorVersionID}"
+							action="#{account.openVersion(testrun.testSuite.version)}"
+							disabled="#!{account.canViewVersion(#{testrun.testSuite.version})}"
+							rendered="#{testrun.testSuite.version.name eq null}" />
+					</h:column>
+					<h:column>
+						<h:commandLink value="#{testrun.testSuite.version.app.name}"
+							action="#{account.openApp(testrun.testSuite.version.app)}"
+							disabled="#!{account.canViewApp(#{testrun.testSuite.version.app})}" />
+					</h:column>
+					<h:column>
+						<h:commandLink value="(delete)"
+							action="#{account.deleteTestRun(testrun)}"
+							rendered="#{account.canDeleteTestRun(testrun)}" />
+					</h:column>
+				</h:dataTable>
+				<h:outputText value="You have no test runs, yet."
+					rendered="#{empty account.currentUser.memberships}" />
+			</h:form>
+		</div>
+	</ui:define>
+</ui:composition>
+</html>

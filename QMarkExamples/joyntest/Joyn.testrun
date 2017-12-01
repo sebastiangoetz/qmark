@@ -1,0 +1,10 @@
+TestRun MailDroidTests
+applicationUnderTest : "apk/joyn_8.66" com.telekom.joyn
+unitTests : "bin/joyntest" com.telekom.joyn.test
+numberOfRuns : 1
+hardwareProfiling : on
+run : onServer
+
+TestSuite ForegroundTests {
+	UnitTestCase com.telekom.joyn.test.JoynTests#testSendMessage
+}

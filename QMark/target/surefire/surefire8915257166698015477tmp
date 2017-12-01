@@ -1,0 +1,35 @@
+#surefire
+#Tue Oct 30 12:32:28 CET 2012
+testClassesDirectory=D\:\\dev\\QMark\\QMark\\target\\test-classes
+classPathUrl.4=C\:\\Users\\maquiz\\.m2\\repository\\javax\\inject\\javax.inject\\1\\javax.inject-1.jar
+classPathUrl.3=C\:\\Users\\maquiz\\.m2\\repository\\org\\jboss\\spec\\javax\\interceptor\\jboss-interceptors-api_1.1_spec\\1.0.0.Final\\jboss-interceptors-api_1.1_spec-1.0.0.Final.jar
+classPathUrl.2=C\:\\Users\\maquiz\\.m2\\repository\\javax\\enterprise\\cdi-api\\1.0-SP4\\cdi-api-1.0-SP4.jar
+useManifestOnlyJar=true
+classPathUrl.1=D\:\\dev\\QMark\\QMark\\target\\classes
+reportsDirectory=D\:\\dev\\QMark\\QMark\\target\\surefire-reports
+classPathUrl.0=D\:\\dev\\QMark\\QMark\\target\\test-classes
+dirscanner.0=directoryScannerOptions
+providerConfiguration=org.apache.maven.surefire.junit.JUnit3Provider
+testSuiteDefinitionTestSourceDirectory=D\:\\dev\\QMark\\QMark\\src\\test\\java
+surefireClassPathUrl.1=C\:\\Users\\maquiz\\.m2\\repository\\org\\apache\\maven\\surefire\\surefire-api\\2.7.1\\surefire-api-2.7.1.jar
+surefireClassPathUrl.0=C\:\\Users\\maquiz\\.m2\\repository\\org\\apache\\maven\\surefire\\surefire-junit3\\2.7.1\\surefire-junit3-2.7.1.jar
+report.2=org.apache.maven.surefire.report.XMLReporter
+useSystemClassLoader=true
+report.1=org.apache.maven.surefire.report.BriefFileReporter
+report.0=org.apache.maven.surefire.report.ForkingConsoleReporter
+excludes0=**/*$*
+isTrimStackTrace=true
+dirscanner.0.params=D\:\\dev\\QMark\\QMark\\target\\test-classes|[**/Test*.java, **/*Test.java, **/*TestCase.java]|[**/*$*]
+includes2=**/*TestCase.java
+enableAssertions=true
+includes1=**/*Test.java
+failIfNoTests=false
+includes0=**/Test*.java
+dirscanner.0.types=java.io.File|java.util.ArrayList|java.util.ArrayList
+classPathUrl.10=C\:\\Users\\maquiz\\.m2\\repository\\org\\jboss\\spec\\javax\\ejb\\jboss-ejb-api_3.1_spec\\1.0.1.Final\\jboss-ejb-api_3.1_spec-1.0.1.Final.jar
+classPathUrl.9=C\:\\Users\\maquiz\\.m2\\repository\\org\\jboss\\spec\\javax\\transaction\\jboss-transaction-api_1.1_spec\\1.0.0.Final\\jboss-transaction-api_1.1_spec-1.0.0.Final.jar
+classPathUrl.8=C\:\\Users\\maquiz\\.m2\\repository\\org\\hibernate\\javax\\persistence\\hibernate-jpa-2.0-api\\1.0.0.Final\\hibernate-jpa-2.0-api-1.0.0.Final.jar
+classPathUrl.7=C\:\\Users\\maquiz\\.m2\\repository\\org\\jboss\\spec\\javax\\faces\\jboss-jsf-api_2.0_spec\\1.0.0.Final\\jboss-jsf-api_2.0_spec-1.0.0.Final.jar
+childDelegation=false
+classPathUrl.6=C\:\\Users\\maquiz\\.m2\\repository\\org\\jboss\\spec\\javax\\annotation\\jboss-annotations-api_1.1_spec\\1.0.0.Final\\jboss-annotations-api_1.1_spec-1.0.0.Final.jar
+classPathUrl.5=C\:\\Users\\maquiz\\.m2\\repository\\org\\jboss\\el\\jboss-el\\2.0.1.GA\\jboss-el-2.0.1.GA.jar

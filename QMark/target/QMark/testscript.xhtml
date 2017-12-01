@@ -1,0 +1,39 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core">
+
+<ui:composition template="template.xhtml">
+	<ui:define name="content">
+		<div id="currentgenre">
+			<h:form id="currentgenre_form">
+				<a href="store.xhtml">Home</a> -
+				<h:outputText value=" About TestScript" />
+			</h:form>
+		</div>
+
+		<ui:include src="nav_top.xhtml" />
+
+		<div id="left">
+			<h:inputHidden id="navigation_account_disply"
+				rendered="#{account.loggedIn}">
+				<ui:include src="nav_account.xhtml" />
+			</h:inputHidden>
+
+			<h:inputHidden id="navigation_genre_display"
+				rendered="#{!account.loggedIn}">
+				<ui:include src="nav_genre.xhtml" />
+			</h:inputHidden>
+		</div>
+
+		<div id="apps">
+			<h1>About TestScript</h1>
+
+			<h:messages />
+
+			<h2 class="todo">TBD</h2>
+		</div>
+	</ui:define>
+</ui:composition>
+</html>

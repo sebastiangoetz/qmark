@@ -1,0 +1,40 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+   xmlns:ui="http://java.sun.com/jsf/facelets"
+   xmlns:h="http://java.sun.com/jsf/html"
+   xmlns:f="http://java.sun.com/jsf/core">
+
+<!-- The template for our app, defines some regions and imports styles -->
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <title>QMark - The Energy-Aware App Store</title>
+  <link media="screen, projection" href="layout.css" type="text/css" rel="stylesheet" />
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+  <script src="http://code.highcharts.com/highcharts.js"></script>
+  <ui:insert name="head" />
+</head>
+
+<body>
+
+   <div id="container">
+		<div id="header">
+			<img src="figures/title.gif" width="1000" height="60" alt="qMark Logo" />
+		</div>
+	
+	    <div id="sidebar"></div>
+	
+	    <div id="content">
+	         <ui:insert name="content" />
+	    </div>
+	
+		<div id="footer">
+			<p>QMark created and maintained by TU Dresden. &copy; 2012-2013 Claas Wilke</p>
+		</div>
+
+		<br style="clear: both" />
+   </div>
+
+</body>
+</html>
+

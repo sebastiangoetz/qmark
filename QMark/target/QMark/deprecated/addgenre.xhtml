@@ -1,0 +1,39 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+   xmlns:ui="http://java.sun.com/jsf/facelets"
+   xmlns:h="http://java.sun.com/jsf/html"
+   xmlns:f="http://java.sun.com/jsf/core"
+   xmlns:t="http://myfaces.apache.org/tomahawk">
+
+<ui:composition template="template.xhtml">
+   <ui:define name="content">
+      <h:messages />
+      <h1>Add Genre</h1>
+      <p>Enter the metadata for the new genre you want to create.</p>
+      <h:form>
+         <table>
+            <tr>
+               <td>Name</td>
+               <td><h:inputText value="#{newGenre.name}" size="100"/>
+               </td>
+            </tr>
+            <tr>
+               <td>Description</td>
+               <td><h:inputTextarea value="#{newGenre.description}" rows="3" cols="100" />
+               </td>
+            </tr>
+            <tr>
+            	<td>Use Case Model</td>
+            	<td><t:inputFileUpload value="#{newGenre.useCaseModel}" /></td>
+            </tr>
+            <tr>
+               <td></td>
+               <td><h:commandButton action="#{genreManager.addGenre}"
+                     value="Add Genre" />
+               </td>
+            </tr>
+         </table>
+      </h:form>
+   </ui:define>
+</ui:composition>
+</html>

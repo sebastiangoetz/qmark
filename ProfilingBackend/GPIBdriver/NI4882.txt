@@ -1,0 +1,7 @@
+National Instruments GPIB-USB-Driver
+====================================
+CD KIT, NI-488.2 FOR WINDOWS, VER 2.7.3
+P/N 501088L-00
+SO: 2117896
+
+ISO FILE IS AVAILABLE VIA SEBASTIAN RICHLY

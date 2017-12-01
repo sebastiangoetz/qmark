@@ -1,0 +1,18 @@
+<project name="MyProject" default="copy" basedir=".">
+	<description>
+        Just to fix the shit
+    </description>
+
+	<property name="buildwar" location="D:\dev\workspaces\qmark\QMark\target\QMark.war" />
+	<property name="serverlocation" location="D:\dev\workspaces\qmark\Server\jboss-as-7.1.1.Final\standalone\deployments\" />
+	<property name="war_dir" location="QMark.war" />
+
+	<target name="clean" description="clean up">
+		<delete dir="D:\dev\workspaces\qmark\Server\jboss-as-7.1.1.Final\standalone\deployments\QMark.war" />
+	</target>
+
+	<target name="copy" depends="clean" description="Copy to server">
+		<copy file="${buildwar}" todir="${serverlocation}" overwrite="true" />
+		<touch file="${serverlocation}\QMark.war.dodeploy"/>
+	</target>
+</project>

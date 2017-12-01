@@ -1,0 +1,33 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsf/composite">
+
+<body>
+	<div id="account">
+		<h:form id="navigation_account">
+			<table>
+				<tr>
+					<td><a href="settings.xhtml">My Settings</a></td>
+				</tr>
+				<tr>
+					<td><a href="companies.xhtml">My Companies</a></td>
+				</tr>
+				<tr>
+					<td><a href="projects.xhtml">My Projects</a></td>
+				</tr>
+				<tr>
+					<td><a href="testruns.xhtml">My Test Runs</a></td>
+				</tr>
+				<h:inputHidden rendered="#{account.canAcceptUserRegistration()}">
+				<tr>
+					<td><a href="admin.xhtml">Administration</a></td>
+				</tr>
+				</h:inputHidden>
+			</table>
+		</h:form>
+	</div>
+</body>
+</html>

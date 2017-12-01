@@ -1,0 +1,34 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+   xmlns:ui="http://java.sun.com/jsf/facelets"
+   xmlns:h="http://java.sun.com/jsf/html"
+   xmlns:f="http://java.sun.com/jsf/core"
+   xmlns:c="http://java.sun.com/jsf/composite">
+   
+   <head>
+   		<script type="text/javascript">
+			function updateTransition(container_name, transition_value) {
+				document.getElementsByName(container_name)[0].firstChild.value = transition_value;
+				document.use_cases_form.submit();
+			}
+		</script>
+   </head>
+
+	<body>
+	  	  <div id="usecases">
+		      <h:form id="use_cases_form">
+		 	      <h:dataTable value="#{sessionState.currentGenre.useCaseModel.transitions}" var="transition">
+			         <h:column>
+						<h:outputText value="#{transition.name}" title="#{transition.description}" />
+						<input type="range" min="0" max="4" value="#{sessionState.useCaseIntensity[transition.name]}"
+						    onclick="updateTransition('#{transition.transitionID}_intensity', this.value)" 
+						    title="#{transition.description}" />
+						<div name="#{transition.transitionID}_intensity">
+ 				 			<h:inputHidden value="#{sessionState.useCaseIntensity[transition.name]}" />
+ 				 		</div>
+			         </h:column>
+			      </h:dataTable>
+		      </h:form>
+	  	  </div>
+	</body>
+</html>

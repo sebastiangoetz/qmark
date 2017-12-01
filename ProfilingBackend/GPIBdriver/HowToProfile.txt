@@ -1,0 +1,6 @@
+HOW TO CONNECT TO WT 210 POWER METER
+====================================
+* Connect power meter and computer via GPIB-USB cable (multiple devices can be stacked)
+* Install NI GPIB driver (ISO available via Sebastian R.)
+* Select DLL for 32 or 64bit Java and add to environment
+* JouleUnit should now be able to profile via the WT210Profiler

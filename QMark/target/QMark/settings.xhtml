@@ -1,0 +1,106 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsf/composite"
+	xmlns:d="http://java.sun.com/jsp/jstl/core">
+
+<ui:composition template="template.xhtml">
+
+	<ui:define name="head">
+	</ui:define>
+
+	<ui:define name="content">
+		<div id="currentgenre">
+			<h:form id="currentgenre_form">
+				<h:commandLink value="My Account" action="account" />
+					-
+			<h:outputText value="Settings" />
+			</h:form>
+		</div>
+
+		<ui:include src="nav_top.xhtml" />
+
+		<div id="left">
+			<h:inputHidden id="navigation_account_disply"
+				rendered="#{account.loggedIn}">
+				<ui:include src="nav_account.xhtml" />
+			</h:inputHidden>
+
+			<h:inputHidden id="navigation_genre_display"
+				rendered="#{!account.loggedIn}">
+				<ui:include src="nav_genre.xhtml" />
+			</h:inputHidden>
+		</div>
+
+		<div id="apps">
+			<h1>
+				<h:outputText value="My Settings" rendered="#{account.loggedIn}" />
+				<h:outputText value="Register" rendered="#{!account.loggedIn}" />
+			</h1>
+
+			<h:messages />
+
+			<h:inputHidden
+				rendered="#{account.canEditSettings(account.currentUser) or account.newUser}">
+				<h:form id="settings_form">
+					<table>
+						<tr>
+							<td width="130px">Login*:</td>
+							<td><h:inputText size="85"
+									value="#{account.currentUser.login}" /></td>
+						</tr>
+						<tr>
+							<td>Password*:</td>
+							<td><h:inputSecret size="85"
+									value="#{account.currentUser.password}" /></td>
+						</tr>
+						<tr>
+							<td>Email address*:</td>
+							<td><h:inputText size="85"
+									value="#{account.currentUser.emailaddress}" /></td>
+						</tr>
+						<tr>
+							<td>Title:</td>
+							<td><h:inputText size="85"
+									value="#{account.currentUser.userMetaData.title}" /></td>
+						</tr>
+						<tr>
+							<td>Firstname:</td>
+							<td><h:inputText size="85"
+									value="#{account.currentUser.userMetaData.firstname}" /></td>
+						</tr>
+						<tr>
+							<td>Surname:</td>
+							<td><h:inputText size="85"
+									value="#{account.currentUser.userMetaData.surname}" /></td>
+						</tr>
+						<tr>
+							<td>Gender:</td>
+							<td><h:selectOneMenu
+									value="#{account.currentUser.userMetaData.gender}"
+									converter="#{typeConverter}">
+									<f:selectItems value="#{account.genderTypes}" var="gender"
+										itemLabel="#{gender.name}" />
+								</h:selectOneMenu></td>
+						</tr>
+						<tr>
+							<td></td>
+							<td>* = mandatory fields.</td>
+						</tr>
+						<tr>
+							<td></td>
+							<td><h:commandButton value="Update Settings"
+									action="#{account.updateUser}" rendered="#{!account.newUser}" />
+								<h:commandButton value="Register" action="#{account.createUser}"
+									rendered="#{account.newUser}" /></td>
+						</tr>
+					</table>
+				</h:form>
+			</h:inputHidden>
+		</div>
+
+	</ui:define>
+</ui:composition>
+</html>

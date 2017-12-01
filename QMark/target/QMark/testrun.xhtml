@@ -1,0 +1,309 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsf/composite"
+	xmlns:d="http://java.sun.com/jsp/jstl/core"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+
+<ui:composition template="template.xhtml">
+
+	<ui:define name="head">
+		<script type="text/javascript">
+			function showDetails(id) {
+				if (document.getElementById(id).style.display == 'none') {
+					document.getElementById(id).style.display = 'inline';
+				}
+				else {
+					document.getElementById(id).style.display = 'none';
+				}
+			}
+		</script>
+
+		<d:set
+			value="#{testSuiteManager.getTestRun(account.selectedTestRun.testRunID).type.description}"
+			var="status" />
+		<h:inputHidden
+			rendered="#{(!account.newTestRun) and ((status eq 'Running') or (status eq 'Scheduled'))}">
+			<meta http-equiv="refresh" content="2" />
+		</h:inputHidden>
+	</ui:define>
+
+	<ui:define name="content">
+		<div id="currentgenre">
+			<h:form id="currentgenre_form">
+				<h:commandLink value="My Account" action="account" />
+				- <h:commandLink value="Projects" action="projects" />
+				- <h:commandLink
+					value="#{account.selectedTestRun.testSuite.version.app.name}"
+					action="#{account.openApp(account.selectedTestRun.testSuite.version.app, account.selecteMember)}"
+					disabled="#{!account.canViewApp(account.selectedTestRun.testSuite.version.app, account.selecteMember)}" />
+				- <d:set var="versionname"
+					value="#{account.selectedTestRun.testSuite.version.name}" />
+				<h:commandLink
+					value="#{account.selectedTestRun.testSuite.version.vendorVersionID}"
+					action="#{account.openVersion(account.selectedTestRun.testSuite.version)}"
+					disabled="#{!account.canViewVersion(account.selectedTestRun.testSuite.version)}"
+					rendered="#{(versionname eq null) or (versionname.length() eq 0)}" />
+				<h:commandLink value="#{versionname}"
+					action="#{account.openVersion(account.selectedTestRun.testSuite.version)}"
+					disabled="#{!account.canViewVersion(account.selectedTestRun.testSuite.version)}"
+					rendered="#{(!(versionname eq null)) and  (!(versionname.length() eq 0))}" />
+				- <h:commandLink value="#{account.selectedTestRun.testSuite.name}"
+					action="#{account.openTestSuite(account.selectedTestRun.testSuite)}"
+					disabled="#{!account.canViewTestSuite(account.selectedTestRun.testSuite)}" />
+				- <h:outputText value="New Test Run"
+					rendered="#{account.newTestRun}" />
+				<h:outputText value="Test Run ##{account.selectedTestRun.testRunID}"
+					rendered="#{!account.newTestRun}" />
+			</h:form>
+		</div>
+
+		<ui:include src="nav_top.xhtml" />
+
+		<div id="left">
+			<h:inputHidden id="navigation_account_disply"
+				rendered="#{account.loggedIn}">
+				<ui:include src="nav_account.xhtml" />
+			</h:inputHidden>
+		</div>
+
+		<div id="apps">
+			<h1>Test Run Details</h1>
+
+			<h:messages />
+
+			<h3>
+				Meta Data <a href="javascript:showDetails('metaData');"><img
+					src="figures/showHide.gif" title="Show/hide meta data" /></a>
+			</h3>
+			<div id="metaData" style="display: inline;">
+				<h:form id="testsuite_form">
+					<table>
+						<tr>
+							<td width="150px">Test run of test suite:</td>
+							<td><h:commandLink
+									value="#{account.selectedTestRun.testSuite.name}"
+									action="#{account.openTestSuite(account.selectedTestRun.testSuite)}"
+									disabled="#{!account.canViewTestSuite(account.selectedTestRun.testSuite)}" /></td>
+						</tr>
+						<tr>
+							<td>Status:</td>
+							<td><h:inputHidden
+									rendered="#{(!account.newTestRun) and (account.selectedTestRun.testRunID gt 0)}">
+									<d:set var="description"
+										value="#{testSuiteManager.getTestRun(account.selectedTestRun.testRunID).type.description}" />
+									<h:inputHidden rendered="#{description eq 'Running'}">
+										<img src="figures/progressbar.gif" />
+									</h:inputHidden>
+									<h:outputText value="#{description}"
+										rendered="#{!(description eq 'Running')}" />
+								</h:inputHidden> <h:outputText
+									value="#{account.selectedTestRun.type.description}"
+									rendered="#{(!account.newTestRun) and (account.selectedTestRun.testRunID lt 1)}" />
+								<h:outputText value="To be scheduled"
+									rendered="#{account.newTestRun}" /></td>
+						</tr>
+						<tr>
+							<td>Test device:</td>
+							<td><h:outputText
+									value="#{account.selectedTestRun.device.name}"
+									rendered="#{!account.newTestRun and !(account.selectedTestRun.device eq null)}" />
+								<h:selectOneMenu value="#{account.selectedTestRun.device}"
+									rendered="#{account.newTestRun}" converter="#{deviceConverter}">
+									<f:selectItems value="#{deviceManager.devices}" var="device"
+										converter="#{deviceConverter}" itemLabel="#{device.name}" />
+								</h:selectOneMenu></td>
+						</tr>
+						<tr>
+							<td>Hardware profiling:</td>
+							<td><h:selectOneMenu
+									value="#{account.selectedTestRun.isHwProfilingEnabled}"
+									rendered="#{account.newTestRun}">
+									<f:selectItem itemValue="false" itemLabel="off" />
+									<f:selectItem itemValue="true" itemLabel="on" />
+								</h:selectOneMenu> <h:outputText value="on"
+									rendered="#{(!account.newTestRun) and account.selectedTestRun.isHwProfilingEnabled}" />
+								<h:outputText value="off"
+									rendered="#{(!account.newTestRun) and !account.selectedTestRun.isHwProfilingEnabled}" /></td>
+						</tr>
+						<tr>
+							<td>Idle profiling time:</td>
+							<td><h:inputText value="#{account.selectedTestRun.idleTime}"
+									rendered="#{account.newTestRun}" /> <h:outputText
+									value="#{account.selectedTestRun.idleTime}"
+									rendered="#{!account.newTestRun}" /> seconds</td>
+						</tr>
+						<tr>
+							<td>Iterations:</td>
+							<td><h:inputText
+									value="#{account.selectedTestRun.numberOfRuns}"
+									rendered="#{account.newTestRun}" /> <h:outputText
+									value="#{account.selectedTestRun.numberOfRuns}"
+									rendered="#{!account.newTestRun}" /></td>
+						</tr>
+						<tr>
+							<td>Test Script:<br /> <small><a
+									href="javascript:showDetails('testScript');">What is this?</a></small></td>
+							<td><div id="testScript" style="display: none;">
+									<p>
+										TestScript is a simple scripting language that can be used to
+										describe test cases that cannot be expressed with classical
+										JUnit tests (e.g., test cases switching the display on and off
+										or including multiple applications under test). <a
+											href="testscript.xhtml">Further details on how to use
+											TestScript can be found via this link.</a>
+									</p>
+								</div> <h:inputTextarea cols="85" rows="15"
+									value="#{account.selectedTestRun.testScript}"
+									readonly="#{!account.newTestRun}" /></td>
+						</tr>
+						<tr>
+							<td></td>
+							<td><h:commandButton value="Trigger test run"
+									action="#{account.triggerTestRun}"
+									rendered="#{account.newTestRun}" /></td>
+						</tr>
+					</table>
+				</h:form>
+			</div>
+
+			<h:inputHidden rendered="#{!account.newTestRun}">
+				<h2>Test Results</h2>
+				
+				<h3>Power Measurements as raw data <a href="javascript:showDetails('results');"><img
+						src="figures/showHide.gif" title="Show/hide raw data" /></a></h3>
+				<div id="results" style="width:100%; height:400px;"></div>
+				
+			   	<script><h:outputText value="#{account.getMeasurementResultsForTestRun(account.selectedTestRun)}"></h:outputText></script>
+
+				<h3>
+					Test Cases <a href="javascript:showDetails('testCases');"><img
+						src="figures/showHide.gif" title="Show/hide test cases" /></a>
+				</h3>
+				<div id="testCases" style="display: inline;">
+					<h:form id="testCasesForm">
+						<d:set
+							value="#{testSuiteManager.getTestCases(account.selectedTestRun)}"
+							var="testCases" />
+						<h:dataTable binding="#{table}"
+							value="#{testSuiteManager.getTestCases(account.selectedTestRun)}"
+							var="testcase" rendered="#{not empty testCases}"
+							columnClasses="left,left,center,right,right,right">
+							<h:column>
+								<f:facet name="header"> Name </f:facet>
+								<h:commandLink value="#{testcase.name}"
+									action="#{account.openTestCase(testcase)}"
+									rendered="#{account.canViewTestCase(testcase)}" />
+								<h:outputText value="#{testcase.name}"
+									rendered="#{!account.canViewTestCase(testcase)}" />
+							</h:column>
+							<h:column>
+								<f:facet name="header"> Tag </f:facet>
+								<h:outputText value="#{testcase.tag}" />
+							</h:column>
+							<h:column>
+								<f:facet name="header"> Result </f:facet>
+								<h:outputText value="ok" rendered="#{testcase.result eq 1}" />
+								<h:outputText value="failure"
+									rendered="#{testcase.result eq -1}" />
+							</h:column>
+							<h:column>
+								<f:facet name="header"> Duration [ms] </f:facet>
+								<d:set value="#{testcase.stop - testcase.start}" var="duration" />
+								<h:outputText value="#{duration}" />
+							</h:column>
+							<h:column>
+								<f:facet name="header"> Power Rate [mW] </f:facet>
+								<h:outputText value="#{testcase.avgPowerRate}"
+									rendered="#{testcase.avgPowerRate != null}" />
+								<h:outputText value="#{testSuiteManager.getPowerRate(testcase)}"
+									rendered="#{testcase.avgPowerRate == null}" />
+							</h:column>
+							<h:column>
+								<f:facet name="header"> Consumption [mJ] </f:facet>
+								<h:outputText value="#{testcase.avgPowerRate * duration / 1000}">
+									<f:convertNumber maxFractionDigits="2" minFractionDigits="2" />
+								</h:outputText>
+							</h:column>
+						</h:dataTable>
+						<h:outputText value="No test cases associated to this test run."
+							rendered="#{empty testCases}" />
+					</h:form>
+				</div>
+
+				<h3>
+					Average Test Results <a
+						href="javascript:showDetails('avgTestCases');"><img
+						src="figures/showHide.gif" title="Show/hide average test results" /></a>
+				</h3>
+				<div id="avgTestCases" style="display: inline;">
+					<h:form id="avgTestCasesForm">
+						<d:set
+							value="#{testSuiteManager.getTestCases(account.selectedTestRun)}"
+							var="avgTestCases" />
+						<h:dataTable binding="#{table2}"
+							value="#{testSuiteManager.getAvgTestCasesOfTestRun(account.selectedTestRun)}"
+							var="avgtestcase" rendered="#{not empty testCases}"
+							columnClasses="left,right,right,right,right,right">
+							<h:column>
+								<f:facet name="header"> Name </f:facet>
+								<h:outputText value="#{avgtestcase.name}" />
+							</h:column>
+							<h:column>
+								<f:facet name="header"> Ok </f:facet>
+								<h:outputText value="#{avgtestcase.okCases}"
+									rendered="#{!(avgtestcase.okCases eq null)}" />
+							</h:column>
+							<h:column>
+								<f:facet name="header"> Failed </f:facet>
+								<h:outputText value="#{avgtestcase.failedCases}"
+									rendered="#{!(avgtestcase.failedCases eq null)}" />
+							</h:column>
+							<h:column>
+								<f:facet name="header"> Avg Duration [ms] </f:facet>
+								<d:set value="#{avgtestcase.avgDuration}" var="avgDuration" />
+								<h:outputText value="#{avgDuration}"
+									rendered="#{!(avgDuration eq null)}" />
+							</h:column>
+							<h:column>
+								<f:facet name="header"> Avg Power Rate [mW] </f:facet>
+								<h:outputText value="#{avgtestcase.avgPowerRate}"
+									rendered="#{!(avgtestcase.avgPowerRate eq null)}" />
+							</h:column>
+							<h:column>
+								<f:facet name="header"> Avg Consumption [mJ] </f:facet>
+								<h:outputText
+									value="#{avgtestcase.avgPowerRate * avgDuration / 1000}"
+									rendered="#{!(avgtestcase.avgPowerRate eq null)}">
+									<f:convertNumber maxFractionDigits="2" minFractionDigits="2" />
+								</h:outputText>
+							</h:column>
+						</h:dataTable>
+						<h:outputText value="No test cases associated to this test run."
+							rendered="#{empty avgTestCases}" />
+					</h:form>
+				</div>
+			</h:inputHidden>
+
+			<h:inputHidden rendered="#{!account.newTestRun}">
+				<h3>
+					Console: <a href="javascript:showDetails('console');"><img
+						src="figures/showHide.gif" title="Show/hide console" /></a>
+				</h3>
+				<div id="console" style="display: none;">
+					<!-- I use a freshly-fetched test run here to avoid lost updates in the console's state due to refreshes. -->
+					<p>
+						<h:outputText
+							value="#{fn:replace(testSuiteManager.getTestRun(account.selectedTestRun.testRunID).console,'\\n','&lt;br/&gt;')}"
+							escape="false"
+							rendered="#{account.selectedTestRun.testRunID gt 0}" />
+					</p>
+				</div>
+			</h:inputHidden>
+		</div>
+	</ui:define>
+</ui:composition>
+</html>

@@ -1,0 +1,215 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsf/composite"
+	xmlns:d="http://java.sun.com/jsp/jstl/core"
+	xmlns:t="http://myfaces.apache.org/tomahawk">
+
+<ui:composition template="template.xhtml">
+
+	<ui:define name="head">
+		<script type="text/javascript">
+			function showDetails(id) {
+				if (document.getElementById(id).style.display == 'none') {
+					document.getElementById(id).style.display = 'inline';
+				}
+				else {
+					document.getElementById(id).style.display = 'none';
+				}
+			}
+		</script>
+	</ui:define>
+
+	<ui:define name="content">
+		<div id="currentgenre">
+			<h:form id="currentgenre_form">
+				<h:commandLink value="My Account" action="account" />
+			-
+			<h:commandLink value="Projects" action="projects" />
+			-
+			<h:commandLink value="#{account.selectedTestSuite.version.app.name}"
+					action="#{account.openApp(account.selectedTestSuite.version.app, account.selecteMember)}"
+					disabled="#{!account.canViewApp(account.selectedTestSuite.version.app, account.selecteMember)}" />
+			-
+			<d:set var="versionname"
+					value="#{account.selectedTestSuite.version.name}" />
+				<h:commandLink
+					value="#{account.selectedTestSuite.version.vendorVersionID}"
+					action="#{account.openVersion(account.selectedTestSuite.version)}"
+					disabled="#{!account.canViewVersion(account.selectedTestSuite.version)}"
+					rendered="#{(versionname eq null) or (versionname.length() eq 0)}" />
+				<h:commandLink value="#{versionname}"
+					action="#{account.openVersion(account.selectedTestSuite.version)}"
+					disabled="#{!account.canViewVersion(account.selectedTestSuite.version)}"
+					rendered="#{(!(versionname eq null)) and  (!(versionname.length() eq 0))}" />
+			-
+			<h:outputText value="#{account.selectedTestSuite.name}"
+					rendered="#{!account.newTestSuite}" />
+				<h:outputText value="New Test Suite"
+					rendered="#{account.newTestSuite}" />
+			</h:form>
+		</div>
+
+		<ui:include src="nav_top.xhtml" />
+
+		<div id="left">
+			<h:inputHidden id="navigation_account_disply"
+				rendered="#{account.loggedIn}">
+				<ui:include src="nav_account.xhtml" />
+			</h:inputHidden>
+		</div>
+
+		<div id="apps">
+			<h1>Test Suite Details</h1>
+
+			<h:messages />
+
+			<h:form id="testsuite_form">
+				<table>
+					<tr>
+						<td width="150px">Test suite of version:</td>
+						<td colspan="2"><h:commandLink
+								value="#{account.selectedTestSuite.version.app.name} - #{account.selectedTestSuite.version.name}"
+								action="#{account.openVersion(account.selectedTestSuite.version)}"
+								rendered="#{!(account.selectedTestSuite.version.name eq null) and (account.selectedTestSuite.version.name.length() gt 0)}" />
+							<h:commandLink
+								value="#{account.selectedTestSuite.version.app.name} - #{account.selectedTestSuite.version.vendorVersionID}"
+								action="#{account.openVersion(account.selectedTestSuite.version)}"
+								rendered="#{(account.selectedTestSuite.version.name eq null) or (account.selectedTestSuite.version.name.length() eq 0)}" /></td>
+					</tr>
+					<tr>
+						<td>Name:*<br /></td>
+						<td><h:inputText size="85"
+								value="#{account.selectedTestSuite.name}" /></td>
+					</tr>
+					<tr>
+						<td colspan="2"><p>
+								<strong>Instructions:</strong> You have to provide either a
+								JUnit test suite (<i>APK File</i>) and a <i>Package ID</i> or a
+								<i>Test Script</i> and possibly a JUnit test suite (<i>APK
+									File</i>). <a href="javascript:showDetails('learnMore');">Learn
+									more</a>
+							</p>
+							<div id="learnMore" style="display: none;">
+								<p>Based on the Android instrumentation framework, Android
+									applications can be tested with JUnit test. Therewore JUnit
+									tests are packed as an Android Package File (APK) and can be
+									deployed on the device where they should be executed. To
+									trigger their execution, the instrumentation framework requires
+									the package ID that uniquely identifies the APK file and can be
+									configured within the Manifest file of the test project.</p>
+								<p>Therefore you have to give the APK file containing the
+									unit tests and their package ID to provide executable test
+									cases. Alternatively you can use a test script that can be
+									given below which might trigger the execution of Unit tests
+									(than an APK file is required) or can emulated simple UI tests
+									without the application of JUnit. Further instructions on how
+									to use the test script language is given next to the text field
+									to enter the script.</p>
+							</div></td>
+					</tr>
+					<tr>
+						<td>Package ID:<br /> <small>(e.g.,
+								com.google.mail.test)</small></td>
+						<td><h:inputText size="85"
+								value="#{account.selectedTestSuite.packageID}" /></td>
+					</tr>
+					<tr>
+						<td>APK File:</td>
+						<td><h:outputText
+								value="#{account.selectedTestSuite.apk.name}"
+								rendered="#{!(account.selectedTestSuite.apk eq null)}" /> <h:outputText
+								value="No APK file available."
+								rendered="#{account.selectedTestSuite.apk eq null}" />&nbsp;<h:commandLink
+								value="(delete)"
+								action="#{account.deleteTestSuiteApk(account.selectedTestSuite)}"
+								rendered="#{(!(account.selectedTestSuite.apk eq null)) and account.canEditTestSuite(account.selectedTestSuite)}" /></td>
+					</tr>
+					<tr>
+						<td>Test Script:<br /> <small><a
+								href="javascript:showDetails('testScript');">What is this?</a></small>
+						</td>
+						<td><div id="testScript" style="display: none;">
+								<p>
+									TestScript is a simple scripting language that can be used to
+									describe test cases that cannot be expressed with classical
+									JUnit tests (e.g., test cases switching the display on and off
+									or including multiple applications under test). <a
+										href="testscript.xhtml">Further details on how to use
+										TestScript can be found via this link.</a>
+								</p>
+							</div> <h:inputTextarea cols="85" rows="10"
+								value="#{account.selectedTestSuite.testScript}" /></td>
+					</tr>
+					<tr>
+						<td></td>
+						<td><h:commandButton value="Update Test Suite"
+								action="#{account.updateTestSuite(account.selectedTestSuite)}"
+								rendered="#{!account.newTestSuite}" /> <h:commandButton
+								value="Create Test Suite" action="#{account.createTestSuite}"
+								rendered="#{account.newTestSuite}" /></td>
+					</tr>
+				</table>
+			</h:form>
+
+			<h:form enctype="multipart/form-data"
+				rendered="#{account.selectedTestSuite.apk eq null}" id="apk_form">
+				<h2>Upload APK File</h2>
+				<p>Select and upload an Android package (APK) file for this test
+					suite:</p>
+				<h:inputHidden id="fileTarget" value="#{fileUpload.fileTarget}" />
+				<t:inputFileUpload value="#{fileUpload.uploadedFile}" />
+				<h:commandButton value="Add APK" action="#{fileUpload.uploadFile}"
+					onclick="document.getElementById('apk_form:fileTarget').value = 'testsuite'" />
+			</h:form>
+
+			<h:inputHidden rendered="#{!account.newTestSuite}">
+				<h2>Test Runs</h2>
+				<d:set var="numberOfTestRuns"
+					value="#{testSuiteManager.getNumberOfTestRuns(account.selectedTestSuite)}" />
+				<p>
+					<h:outputText
+						value="The following test runs exist for this test suite:"
+						rendered="#{numberOfTestRuns gt 0}" />
+				</p>
+				<h:form id="tests_form">
+					<h:dataTable
+						value="#{testSuiteManager.getTestRuns(account.selectedTestSuite)}"
+						var="test"
+						columnClasses="appdescription,appdescription,appdescription"
+						rendered="#{numberOfTestRuns gt 0}">
+						<h:column>
+							<h:commandLink value="Test run ##{test.testRunID}"
+								action="#{account.openTestRun(test)}"
+								rendered="#{account.canViewTestRun(test)}" />
+							<h:outputText value="Test run ##{test.testRunID}"
+								rendered="#{!account.canViewTestRun(test)}" />
+						</h:column>
+						<h:column>
+							<h:outputText value="#{test.type.description}" />
+						</h:column>
+						<h:column>
+							<h:outputText value="#{test.numberOfRuns} iteration(s)" />
+						</h:column>
+						<h:column>
+							<h:commandLink value="(delete)"
+								action="#{account.deleteTestRun(test)}"
+								rendered="#{account.canDeleteTestRun(test)}" />
+						</h:column>
+					</h:dataTable>
+					<h:outputText value="No test runs exist for this test suite."
+						rendered="#{numberOfTestRuns eq 0}" />
+					<p>
+						<h:commandLink value="Trigger a new test run"
+							action="#{account.openNewTestRun}"
+							rendered="#{account.canTriggerTestRun(account.selectedTestSuite)}" />
+					</p>
+				</h:form>
+			</h:inputHidden>
+		</div>
+
+	</ui:define>
+</ui:composition>
+</html>

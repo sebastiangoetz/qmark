@@ -1,0 +1,62 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core">
+
+<ui:composition template="template.xhtml">
+	<ui:define name="content">
+		<div id="currentgenre">
+			<h:form id="currentgenre_form">
+				<h:commandLink value="My Account" action="account" />
+			-
+			<h:outputText value="Projects" />
+			</h:form>
+		</div>
+
+		<ui:include src="nav_top.xhtml" />
+
+		<div id="left">
+			<h:inputHidden id="navigation_account_disply"
+				rendered="#{account.loggedIn}">
+				<ui:include src="nav_account.xhtml" />
+			</h:inputHidden>
+		</div>
+
+		<div id="apps">
+			<h1>My Projects</h1>
+			<h:messages />
+
+			<h:form id="apps_form">
+				<h:dataTable binding="#{table}"
+					value="#{userManager.getAppMembers(account.currentUser)}" var="membership"
+					columnClasses="appdescription"
+					rendered="#{not empty account.currentUser.memberships}">
+					<h:column>
+						<h:commandLink value="#{membership.app.name}"
+							action="#{account.openApp(membership.app, membership)}"
+							rendered="#{account.canViewApp(membership.app, membership)}" />
+						<h:outputText value="#{membership.app.name}"
+							rendered="#{!account.canViewApp(membership.app, membership)}" />
+					</h:column>
+					<h:column>
+						<h:outputText value="#{membership.type.description}" />
+					</h:column>
+					<h:column>
+						<h:commandLink value="Accept"
+							action="#{account.acceptAppMemberInvitation(membership)}"
+							rendered="#{account.canAcceptAppMemberInvitation(membership)}" />
+					</h:column>
+				</h:dataTable>
+				<h:outputText value="No projects are associated to your account."
+					rendered="#{empty account.currentUser.memberships}" />
+				<br />
+				<h:commandLink value="Create a new project"
+					action="#{account.openNewApp}"
+					rendered="#{account.canCreateNewApp()}" />
+			</h:form>
+
+		</div>
+	</ui:define>
+</ui:composition>
+</html>

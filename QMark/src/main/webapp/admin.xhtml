@@ -1,0 +1,59 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core">
+
+<ui:composition template="template.xhtml">
+	<ui:define name="content">
+		<div id="currentgenre">
+			<h:form id="currentgenre_form">
+				<h:commandLink value="My Account" action="account" />
+			-
+			<h:outputText value="Administration" />
+			</h:form>
+		</div>
+
+		<ui:include src="nav_top.xhtml" />
+
+		<div id="left">
+			<h:inputHidden id="navigation_account_disply"
+				rendered="#{account.loggedIn}">
+				<ui:include src="nav_account.xhtml" />
+			</h:inputHidden>
+		</div>
+
+		<div id="apps">
+			<h1>Pending User Registrations</h1>
+			<h:messages />
+
+			<h:form id="admin_form">
+				<h:dataTable binding="#{table}"
+					value="#{userManager.getUserRegistrations()}" var="user"
+					columnClasses="apptitle, apptitle, apptitle, appdescription">
+					
+					<h:column>
+						<h:outputText value="#{user.login}" />
+					</h:column>
+					<h:column>
+						<h:outputText value="#{user.userMetaData.firstname}" />
+					</h:column>
+					<h:column>
+						<h:outputText value="#{user.userMetaData.firstname}" />
+					</h:column>
+					
+					<h:column>
+						<h:commandLink value="Accept"
+							action="#{account.acceptUserRegistration(user)}"
+							rendered="#{account.canAcceptUserRegistration()}" />
+					</h:column>
+				</h:dataTable>
+				<h:outputText value="No pending user registrations."
+					rendered="#{empty userManager.getUserRegistrations()}" />
+				
+			</h:form>
+
+		</div>
+	</ui:define>
+</ui:composition>
+</html>
