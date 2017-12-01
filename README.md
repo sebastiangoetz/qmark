@@ -1,2 +1,2 @@
-# qmark
+# QMark
 QMark Server Application
